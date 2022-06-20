@@ -1,0 +1,196 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2022 16:21:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\STC_DEMO) DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "STC12C5Axx.h"
+   2          #include "reg51.h"
+*** ERROR C231 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'P0': redefinition
+*** ERROR C231 IN LINE 14 OF C:\Keil_v5\C51\Inc\reg51.h: 'P1': redefinition
+*** ERROR C231 IN LINE 15 OF C:\Keil_v5\C51\Inc\reg51.h: 'P2': redefinition
+*** ERROR C231 IN LINE 16 OF C:\Keil_v5\C51\Inc\reg51.h: 'P3': redefinition
+*** ERROR C231 IN LINE 17 OF C:\Keil_v5\C51\Inc\reg51.h: 'PSW': redefinition
+*** ERROR C231 IN LINE 18 OF C:\Keil_v5\C51\Inc\reg51.h: 'ACC': redefinition
+*** ERROR C231 IN LINE 19 OF C:\Keil_v5\C51\Inc\reg51.h: 'B': redefinition
+*** ERROR C231 IN LINE 20 OF C:\Keil_v5\C51\Inc\reg51.h: 'SP': redefinition
+*** ERROR C231 IN LINE 21 OF C:\Keil_v5\C51\Inc\reg51.h: 'DPL': redefinition
+*** ERROR C231 IN LINE 22 OF C:\Keil_v5\C51\Inc\reg51.h: 'DPH': redefinition
+*** ERROR C231 IN LINE 23 OF C:\Keil_v5\C51\Inc\reg51.h: 'PCON': redefinition
+*** ERROR C231 IN LINE 24 OF C:\Keil_v5\C51\Inc\reg51.h: 'TCON': redefinition
+*** ERROR C231 IN LINE 25 OF C:\Keil_v5\C51\Inc\reg51.h: 'TMOD': redefinition
+*** ERROR C231 IN LINE 26 OF C:\Keil_v5\C51\Inc\reg51.h: 'TL0': redefinition
+*** ERROR C231 IN LINE 27 OF C:\Keil_v5\C51\Inc\reg51.h: 'TL1': redefinition
+*** ERROR C231 IN LINE 28 OF C:\Keil_v5\C51\Inc\reg51.h: 'TH0': redefinition
+*** ERROR C231 IN LINE 29 OF C:\Keil_v5\C51\Inc\reg51.h: 'TH1': redefinition
+*** ERROR C231 IN LINE 30 OF C:\Keil_v5\C51\Inc\reg51.h: 'IE': redefinition
+*** ERROR C231 IN LINE 31 OF C:\Keil_v5\C51\Inc\reg51.h: 'IP': redefinition
+*** ERROR C231 IN LINE 32 OF C:\Keil_v5\C51\Inc\reg51.h: 'SCON': redefinition
+*** ERROR C231 IN LINE 33 OF C:\Keil_v5\C51\Inc\reg51.h: 'SBUF': redefinition
+*** ERROR C231 IN LINE 38 OF C:\Keil_v5\C51\Inc\reg51.h: 'CY': redefinition
+*** ERROR C231 IN LINE 39 OF C:\Keil_v5\C51\Inc\reg51.h: 'AC': redefinition
+*** ERROR C231 IN LINE 40 OF C:\Keil_v5\C51\Inc\reg51.h: 'F0': redefinition
+*** ERROR C231 IN LINE 41 OF C:\Keil_v5\C51\Inc\reg51.h: 'RS1': redefinition
+*** ERROR C231 IN LINE 42 OF C:\Keil_v5\C51\Inc\reg51.h: 'RS0': redefinition
+*** ERROR C231 IN LINE 43 OF C:\Keil_v5\C51\Inc\reg51.h: 'OV': redefinition
+*** ERROR C231 IN LINE 44 OF C:\Keil_v5\C51\Inc\reg51.h: 'P': redefinition
+*** ERROR C231 IN LINE 47 OF C:\Keil_v5\C51\Inc\reg51.h: 'TF1': redefinition
+*** ERROR C231 IN LINE 48 OF C:\Keil_v5\C51\Inc\reg51.h: 'TR1': redefinition
+*** ERROR C231 IN LINE 49 OF C:\Keil_v5\C51\Inc\reg51.h: 'TF0': redefinition
+*** ERROR C231 IN LINE 50 OF C:\Keil_v5\C51\Inc\reg51.h: 'TR0': redefinition
+*** ERROR C231 IN LINE 51 OF C:\Keil_v5\C51\Inc\reg51.h: 'IE1': redefinition
+*** ERROR C231 IN LINE 52 OF C:\Keil_v5\C51\Inc\reg51.h: 'IT1': redefinition
+*** ERROR C231 IN LINE 53 OF C:\Keil_v5\C51\Inc\reg51.h: 'IE0': redefinition
+*** ERROR C231 IN LINE 54 OF C:\Keil_v5\C51\Inc\reg51.h: 'IT0': redefinition
+*** ERROR C231 IN LINE 57 OF C:\Keil_v5\C51\Inc\reg51.h: 'EA': redefinition
+*** ERROR C231 IN LINE 58 OF C:\Keil_v5\C51\Inc\reg51.h: 'ES': redefinition
+*** ERROR C231 IN LINE 59 OF C:\Keil_v5\C51\Inc\reg51.h: 'ET1': redefinition
+*** ERROR C231 IN LINE 60 OF C:\Keil_v5\C51\Inc\reg51.h: 'EX1': redefinition
+*** ERROR C231 IN LINE 61 OF C:\Keil_v5\C51\Inc\reg51.h: 'ET0': redefinition
+*** ERROR C231 IN LINE 62 OF C:\Keil_v5\C51\Inc\reg51.h: 'EX0': redefinition
+*** ERROR C231 IN LINE 65 OF C:\Keil_v5\C51\Inc\reg51.h: 'PS': redefinition
+*** ERROR C231 IN LINE 66 OF C:\Keil_v5\C51\Inc\reg51.h: 'PT1': redefinition
+*** ERROR C231 IN LINE 67 OF C:\Keil_v5\C51\Inc\reg51.h: 'PX1': redefinition
+*** ERROR C231 IN LINE 68 OF C:\Keil_v5\C51\Inc\reg51.h: 'PT0': redefinition
+*** ERROR C231 IN LINE 69 OF C:\Keil_v5\C51\Inc\reg51.h: 'PX0': redefinition
+*** ERROR C231 IN LINE 82 OF C:\Keil_v5\C51\Inc\reg51.h: 'SM0': redefinition
+*** ERROR C231 IN LINE 83 OF C:\Keil_v5\C51\Inc\reg51.h: 'SM1': redefinition
+*** ERROR C231 IN LINE 84 OF C:\Keil_v5\C51\Inc\reg51.h: 'SM2': redefinition
+*** ERROR C231 IN LINE 85 OF C:\Keil_v5\C51\Inc\reg51.h: 'REN': redefinition
+*** ERROR C231 IN LINE 86 OF C:\Keil_v5\C51\Inc\reg51.h: 'TB8': redefinition
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2022 16:21:29 PAGE 2   
+
+*** ERROR C231 IN LINE 87 OF C:\Keil_v5\C51\Inc\reg51.h: 'RB8': redefinition
+*** ERROR C231 IN LINE 88 OF C:\Keil_v5\C51\Inc\reg51.h: 'TI': redefinition
+*** ERROR C231 IN LINE 89 OF C:\Keil_v5\C51\Inc\reg51.h: 'RI': redefinition
+   3          #include "intrins.h"
+   4          
+   5          void Delay100ms();   //@12.000MHz
+   6          
+   7          typedef unsigned char BYTE;
+   8          typedef unsigned int WORD;
+   9          #define FOSC 18432000L //System frequency
+  10          #define BAUD 9600 //UART baudrate
+  11          /*Define UART parity mode*/
+  12          #define NONE_PARITY 0 //None parity
+  13          #define ODD_PARITY 1 //Odd parity
+  14          #define EVEN_PARITY 2 //Even parity
+  15          #define MARK_PARITY 3 //Mark parity
+  16          #define SPACE_PARITY 4 //Space parity
+  17          #define PARITYBIT EVEN_PARITY //Testing even parity
+  18          sbit bit9 = P2^2; //P2.2 show UART data bit9
+  19          bit busy;
+  20          void SendData(BYTE dat);
+  21          void SendString(char *s);
+  22          
+  23          void main(void)
+  24          {
+  25   1        while(1)
+  26   1        {
+  27   2          P1 = 0xFF;
+  28   2          Delay100ms();
+  29   2          P1 = 0x00;
+  30   2          Delay100ms();
+  31   2        };
+  32   1        
+  33   1      #if (PARITYBIT == NONE_PARITY)
+               SCON = 0x50; //8-bit variable UART
+              #elif (PARITYBIT == ODD_PARITY) || (PARITYBIT == EVEN_PARITY) || (PARITYBIT == MARK_PARITY)
+  36   1       SCON = 0xda; //9-bit variable UART, parity bit initial to 1
+  37   1      #elif (PARITYBIT == SPACE_PARITY)
+               SCON = 0xd5; //9-bit variable UART, parity bit initial to 0
+              #endif
+  40   1        
+  41   1      TMOD = 0x20; //Set Timer1 as 8-bit auto reload mode
+  42   1       TH1 = TL1 = -(FOSC/12/32/BAUD); //Set auto-reload vaule
+  43   1       TR1 = 1; //Timer1 start run
+  44   1       ES = 1; //Enable UART interrupt
+  45   1       EA = 1; //Open master interrupt switch
+  46   1       SendString("STC12C5A60S2\r\nUart Test !\r\n");
+  47   1       while(1);
+  48   1        
+  49   1      }
+  50          
+  51          void Delay100ms()   //@12.000MHz
+  52          {
+  53   1        unsigned char i, j, k;
+  54   1      
+  55   1        i = 5;
+  56   1        j = 144;
+  57   1        k = 71;
+  58   1        do
+  59   1        {
+  60   2          do
+  61   2          {
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2022 16:21:29 PAGE 3   
+
+  62   3            while (--k);
+  63   3          } while (--j);
+  64   2        } while (--i);
+  65   1      }
+  66          
+  67          /*----------------------------
+  68          UART interrupt service routine
+  69          ----------------------------*/
+  70          void Uart_Isr() interrupt 4 using 1
+  71          {
+  72   1       if (RI)
+  73   1       {
+  74   2       RI = 0; //Clear receive interrupt flag
+  75   2       P0 = SBUF; //P0 show UART data
+  76   2       bit9 = RB8; //P2.2 show parity bit
+  77   2       }
+  78   1       if (TI)
+  79   1       {
+  80   2       TI = 0; //Clear transmit interrupt flag
+  81   2       busy = 0; //Clear transmit busy flag
+  82   2       }
+  83   1      }
+  84          /*----------------------------
+  85          Send a byte data to UART
+  86          Input: dat (data to be sent)
+  87          Output:None
+  88          ----------------------------*/
+  89          void SendData(BYTE dat)
+  90          {
+  91   1       while (busy); //Wait for the completion of the previous data is sent
+  92   1       ACC = dat; //Calculate the even parity bit P (PSW.0)
+  93   1       if (P) //Set the parity bit according to P
+  94   1       {
+  95   2       #if (PARITYBIT == ODD_PARITY)
+               TB8 = 0; //Set parity bit to 0
+               #elif (PARITYBIT == EVEN_PARITY)
+  98   2       TB8 = 1; //Set parity bit to 1
+  99   2       #endif
+ 100   2       }
+ 101   1       else
+ 102   1       {
+ 103   2       #if (PARITYBIT == ODD_PARITY)
+               TB8 = 1; //Set parity bit to 1
+               #elif (PARITYBIT == EVEN_PARITY)
+ 106   2       TB8 = 0; //Set parity bit to 0
+ 107   2       #endif
+ 108   2       }
+ 109   1       busy = 1;
+ 110   1       SBUF = ACC; //Send data to UART buffer
+ 111   1      }
+ 112          /*----------------------------
+ 113          Send a string to UART
+ 114          Input: s (address of string)
+ 115          Output:None
+ 116          ----------------------------*/
+ 117          void SendString(char *s)
+ 118          {
+ 119   1       while (*s) //Check the end of the string
+ 120   1       {
+ 121   2       SendData(*s++); //Send current char and increment string ptr
+ 122   2       }
+ 123   1      }
+C51 COMPILER V9.60.0.0   MAIN                                                              04/07/2022 16:21:29 PAGE 4   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  55 ERROR(S)

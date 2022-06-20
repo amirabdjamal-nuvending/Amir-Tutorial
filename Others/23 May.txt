@@ -1,0 +1,1044 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+#include "stdlib.h"
+#include "string.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+ UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart2;
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_USART1_UART_Init(void);
+static void MX_USART2_UART_Init(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+uint8_t receivedData[10];
+
+/*Command to be sent to STC board*/
+
+//##### TRAY A #####
+uint16_t A1[] = {0x0FC, 0x002, 0x000, 0x000, 0x000, 0x0FB}; //FC 02 Row Column xx FB where xx is mode
+uint16_t A2[] = {0x0FC, 0x002, 0x001, 0x002, 0x001, 0x0FB};
+uint16_t A3[] = {0x0FC, 0x002, 0x001, 0x003, 0x001, 0x0FB};
+uint16_t A4[] = {0x0FC, 0x002, 0x001, 0x004, 0x001, 0x0FB};
+uint16_t A5[] = {0x0FC, 0x002, 0x001, 0x005, 0x001, 0x0FB};
+uint16_t A6[] = {0x0FC, 0x002, 0x001, 0x006, 0x001, 0x0FB};
+uint16_t A7[] = {0x0FC, 0x002, 0x001, 0x007, 0x001, 0x0FB};
+uint16_t A8[] = {0x0FC, 0x002, 0x001, 0x008, 0x001, 0x0FB};
+uint16_t A9[] = {0x0FC, 0x002, 0x001, 0x009, 0x001, 0x0FB};
+uint16_t A10[] ={0x0FC, 0x002, 0x001, 0x00A, 0x001, 0x0FB};
+
+//##### TRAY B #####
+uint16_t B1[] = {0x0FC, 0x002, 0x002, 0x001, 0x001, 0x0FB};
+uint16_t B2[] = {0x0FC, 0x002, 0x002, 0x002, 0x001, 0x0FB};
+uint16_t B3[] = {0x0FC, 0x002, 0x002, 0x003, 0x001, 0x0FB};
+uint16_t B4[] = {0x0FC, 0x002, 0x002, 0x004, 0x001, 0x0FB};
+uint16_t B5[] = {0x0FC, 0x002, 0x002, 0x005, 0x001, 0x0FB};
+uint16_t B6[] = {0x0FC, 0x002, 0x002, 0x006, 0x001, 0x0FB};
+uint16_t B7[] = {0x0FC, 0x002, 0x002, 0x007, 0x001, 0x0FB};
+uint16_t B8[] = {0x0FC, 0x002, 0x002, 0x008, 0x001, 0x0FB};
+uint16_t B9[] = {0x0FC, 0x002, 0x002, 0x009, 0x001, 0x0FB};
+uint16_t B10[] ={0x0FC, 0x002, 0x002, 0x00A, 0x001, 0x0FB};
+
+//##### TRAY C #####
+uint16_t C1[] = {0x0FC, 0x002, 0x003, 0x001, 0x001, 0x0FB};
+uint16_t C2[] = {0x0FC, 0x002, 0x003, 0x002, 0x001, 0x0FB};
+uint16_t C3[] = {0x0FC, 0x002, 0x003, 0x003, 0x001, 0x0FB};
+uint16_t C4[] = {0x0FC, 0x002, 0x003, 0x004, 0x001, 0x0FB};
+uint16_t C5[] = {0x0FC, 0x002, 0x003, 0x005, 0x001, 0x0FB};
+uint16_t C6[] = {0x0FC, 0x002, 0x003, 0x006, 0x001, 0x0FB};
+uint16_t C7[] = {0x0FC, 0x002, 0x003, 0x007, 0x001, 0x0FB};
+uint16_t C8[] = {0x0FC, 0x002, 0x003, 0x008, 0x001, 0x0FB};
+uint16_t C9[] = {0x0FC, 0x002, 0x003, 0x009, 0x001, 0x0FB};
+uint16_t C10[] ={0x0FC, 0x002, 0x003, 0x00A, 0x001, 0x0FB};
+
+//##### TRAY D #####
+uint16_t D1[] = {0x0FC, 0x002, 0x004, 0x001, 0x001, 0x0FB};
+uint16_t D2[] = {0x0FC, 0x002, 0x004, 0x002, 0x001, 0x0FB};
+uint16_t D3[] = {0x0FC, 0x002, 0x004, 0x003, 0x001, 0x0FB};
+uint16_t D4[] = {0x0FC, 0x002, 0x004, 0x004, 0x001, 0x0FB};
+uint16_t D5[] = {0x0FC, 0x002, 0x004, 0x005, 0x001, 0x0FB};
+uint16_t D6[] = {0x0FC, 0x002, 0x004, 0x006, 0x001, 0x0FB};
+uint16_t D7[] = {0x0FC, 0x002, 0x004, 0x007, 0x001, 0x0FB};
+uint16_t D8[] = {0x0FC, 0x002, 0x004, 0x008, 0x001, 0x0FB};
+uint16_t D9[] = {0x0FC, 0x002, 0x004, 0x009, 0x001, 0x0FB};
+uint16_t D10[] ={0x0FC, 0x002, 0x004, 0x00A, 0x001, 0x0FB};
+
+//##### TRAY E #####
+uint16_t E1[] = {0x0FC, 0x002, 0x005, 0x001, 0x001, 0x0FB};
+uint16_t E2[] = {0x0FC, 0x002, 0x005, 0x002, 0x001, 0x0FB};
+uint16_t E3[] = {0x0FC, 0x002, 0x005, 0x003, 0x001, 0x0FB};
+uint16_t E4[] = {0x0FC, 0x002, 0x005, 0x004, 0x001, 0x0FB};
+uint16_t E5[] = {0x0FC, 0x002, 0x005, 0x005, 0x001, 0x0FB};
+uint16_t E6[] = {0x0FC, 0x002, 0x005, 0x006, 0x001, 0x0FB};
+uint16_t E7[] = {0x0FC, 0x002, 0x005, 0x007, 0x001, 0x0FB};
+uint16_t E8[] = {0x0FC, 0x002, 0x005, 0x008, 0x001, 0x0FB};
+uint16_t E9[] = {0x0FC, 0x002, 0x005, 0x009, 0x001, 0x0FB};
+uint16_t E10[] ={0x0FC, 0x002, 0x005, 0x00A, 0x001, 0x0FB};
+
+//##### TRAY F #####
+uint16_t F1[] = {0x0FC, 0x002, 0x006, 0x001, 0x001, 0x0FB};
+uint16_t F2[] = {0x0FC, 0x002, 0x006, 0x002, 0x001, 0x0FB};
+uint16_t F3[] = {0x0FC, 0x002, 0x006, 0x003, 0x001, 0x0FB};
+uint16_t F4[] = {0x0FC, 0x002, 0x006, 0x004, 0x001, 0x0FB};
+uint16_t F5[] = {0x0FC, 0x002, 0x006, 0x005, 0x001, 0x0FB};
+uint16_t F6[] = {0x0FC, 0x002, 0x006, 0x006, 0x001, 0x0FB};
+uint16_t F7[] = {0x0FC, 0x002, 0x006, 0x007, 0x001, 0x0FB};
+uint16_t F8[] = {0x0FC, 0x002, 0x006, 0x008, 0x001, 0x0FB};
+uint16_t F9[] = {0x0FC, 0x002, 0x006, 0x009, 0x001, 0x0FB};
+uint16_t F10[] ={0x0FC, 0x002, 0x006, 0x00A, 0x001, 0x0FB};
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	HAL_UART_Receive_IT(&huart2, receivedData, 2);
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	//HAL_UART_Transmit_IT(&huart1, transmittedData, sizeof (transmittedData));
+}
+
+
+void receive_transmit_command(void){
+	//memcpy(commandData, receivedData, strlen(receivedData)+1);
+	//commandData = receivedData;
+	HAL_UART_Receive_IT(&huart2,receivedData, 2);
+	//CDC_Transmit_FS((uint8_t *) data, strlen (data));
+	//printf(commandData);
+
+	/////TRAY A/////
+	 if (receivedData[0] == 65 && receivedData[1] == 49){       //A1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     uint8_t buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A1, sizeof (A1));
+		     //HAL_UART_Transmit(&huart1, (uint8_t*)buffer, sprintf(buffer, "%s", A1), 500);
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 50){       //A2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A2, sizeof (A2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 51){       //A3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A3, sizeof (A3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 52){       //A4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A4, sizeof (A4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 53){       //A5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A5, sizeof (A5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 54){       //A6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A6, sizeof (A6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 55){       //A7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A7, sizeof (A7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 56){       //A8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A8, sizeof (A8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 57){       //A9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A9, sizeof (A9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 65 && receivedData[1] == 65){       //A10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, A10, sizeof (A10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 /////TRAY B/////
+	 else if (receivedData[0] == 66 && receivedData[1] == 49){       //B1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(2000);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(2000);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B1, sizeof (B1));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 50){       //B2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B2, sizeof (B2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 51){       //B3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B3, sizeof (B3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 52){       //B4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B4, sizeof (B4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 53){       //B5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B5, sizeof (B5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 54){       //B6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B6, sizeof (B6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 55){       //B7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B7, sizeof (B7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 56){       //B8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B8, sizeof (B8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 57){       //B9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B9, sizeof (B9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 66 && receivedData[1] == 65){       //B10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, B10, sizeof (B10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 /////TRAY C/////
+	 else if (receivedData[0] == 67 && receivedData[1] == 49){       //C1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C1, sizeof (C1));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 50){       //C2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C2, sizeof (C2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 51){       //C3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C3, sizeof (C3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 52){       //C4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C4, sizeof (C4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 53){       //C5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C5, sizeof (C5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 54){       //C6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C6, sizeof (C6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 55){       //C7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C7, sizeof (C7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 56){       //C8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C8, sizeof (C8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 57){       //C9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C9, sizeof (C9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 67 && receivedData[1] == 65){       //C10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, C10, sizeof (C10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 /////TRAY D/////
+	 else if (receivedData[0] == 68 && receivedData[1] == 49){       //D1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D1, sizeof (D1));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 50){       //D2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D2, sizeof (D2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 51){       //D3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D3, sizeof (D3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 52){       //D4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D4, sizeof (D4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 53){       //D5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D5, sizeof (D5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 54){       //D6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D6, sizeof (D6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 55){       //D7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D7, sizeof (D7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 56){       //D8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D8, sizeof (D8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 57){       //D9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D9, sizeof (D9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 68 && receivedData[1] == 65){       //D10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, D10, sizeof (D10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 /////TRAY E/////
+	 else if (receivedData[0] == 69 && receivedData[1] == 49){       //E1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E1, sizeof (E1));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 50){       //E2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E2, sizeof (E2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 51){       //E3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E3, sizeof (E3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 52){       //E4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E4, sizeof (E4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 53){       //E5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E5, sizeof (E5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 54){       //E6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E6, sizeof (E6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 55){       //E7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E7, sizeof (E7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 56){       //E8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E8, sizeof (E8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 57){       //E9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E9, sizeof (E9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 69 && receivedData[1] == 65){       //E10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, E10, sizeof (E10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 /////TRAY F/////
+	 else if (receivedData[0] == 70 && receivedData[1] == 49){       //F1
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F1, sizeof (F1));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 50){       //F2
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F2, sizeof (F2));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 51){       //F3
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F3, sizeof (F3));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 52){       //F4
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F4, sizeof (F4));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 53){       //F5
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F5, sizeof (F5));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 54){       //F6
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F6, sizeof (F6));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 55){       //F7
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F7, sizeof (F7));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 56){       //F8
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F8, sizeof (F8));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 57){       //F9
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F9, sizeof (F9));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+	 else if (receivedData[0] == 70 && receivedData[1] == 65){       //F10
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+		     HAL_Delay(500);
+		     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+		     HAL_Delay(500);
+
+		     char buffer[16];
+		     HAL_UART_Transmit_IT(&huart1, F10, sizeof (F10));
+		     receivedData[0] = 0;
+		     receivedData[1] = 0;
+	  }
+
+	 else {
+//		 char buffer[16];
+//		 HAL_UART_Transmit(&huart1, (uint8_t*)buffer, sprintf(buffer, "%s", invalidCommand), 500);
+//		 receivedData[0] = 0;
+//		 receivedData[1] = 0;
+	 }
+
+}
+
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+  //char buf[100];
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
+  /* USER CODE BEGIN 2 */
+  //HAL_UART_Receive_IT (&huart1, receivedData, 2);
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+	receive_transmit_command();
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 9600;
+  huart1.Init.WordLength = UART_WORDLENGTH_9B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PA1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+}
+
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */
