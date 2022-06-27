@@ -1,0 +1,4 @@
+class Constant:
+    DROP_SENSOR_GPIO = 22
+    DOOR_SENSOR_GPIO = 23
+    SERVER_ADDRESS = 'http://192.168.0.2:3000'

@@ -1,0 +1,6 @@
+.DS_Store
+pi_serial_rfid_usb_retrobee/pi_exec/__pycache__/
+pi_serial_rfid_usb_retrobee/pi_exec/.idea/
+pi_serial_rfid_usb_retrobee/pi_exec/mdb/__pycache__/
+pi_serial_rfid_usb_retrobee/pi_exec/model/__pycache__/
+.idea/
