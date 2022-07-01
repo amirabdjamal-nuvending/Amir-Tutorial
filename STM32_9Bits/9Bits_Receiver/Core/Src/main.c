@@ -71,7 +71,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	//HAL_UART_Transmit_IT(&huart2, Tx1_data, sizeof(Tx1_data));
-	HAL_UART_Receive_DMA(&huart2, Rx_data, 5); //restart the interupt reception mode
+	HAL_UART_Receive_DMA(&huart2, Rx_data, 20); //restart the interupt reception mode
 	//Rx_data[0] = 0; Rx_data[1] = 0; Rx_data[2] = 0; Rx_data[3] = 0; Rx_data[4] = 0;
 }
 
@@ -109,7 +109,7 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart2, Rx_data, 5);
+  HAL_UART_Receive_DMA(&huart2, Rx_data, 20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
