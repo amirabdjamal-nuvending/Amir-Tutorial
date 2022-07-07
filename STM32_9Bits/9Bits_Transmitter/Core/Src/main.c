@@ -58,6 +58,12 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint16_t dropSensor[6] = {0x1FB,  0x104,  0x100,  0x100,  0x100,  0x1FB};
+uint16_t dropSensor2[6] = {0x1FB,  0x106,  0x100,  0x100,  0x100,  0x1FB};
+uint16_t dropSensor3[6] = {0x1FB,  0x154,  0x100,  0x100,  0x100,  0x1FB};
+uint16_t dropSensor4[6] = {0x1FB,  0x155,  0x100,  0x100,  0x100,  0x1FB};
+
+uint16_t A1_Drop[6] = {0x1FB,  0x102,  0x106,  0x10A,  0x101,  0x1FB};
 
 uint16_t A1[6] = {0x1FB,  0x103,  0x106,  0x10A,  0x111,  0x1FB};
 uint16_t A2[6] = {0x1FB,  0x103,  0x106,  0x109,  0x111,  0x1FB};
@@ -167,7 +173,16 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_UART_Transmit_IT(&huart2, (uint8_t *)C3, 6);
+	  HAL_UART_Transmit_IT(&huart2, (uint8_t *)A1_NoDrop, 6);
+	  HAL_Delay(10000);
+//	  HAL_UART_Transmit_IT(&huart2, (uint8_t *)dropSensor, 6);
+//	  HAL_Delay(2000);
+//	  HAL_UART_Transmit_IT(&huart2, (uint8_t *)dropSensor2, 6);
+//	  HAL_Delay(2000);
+//	  HAL_UART_Transmit_IT(&huart2, (uint8_t *)dropSensor3, 6);
+//	  HAL_Delay(2000);
+	 // HAL_UART_Transmit_IT(&huart2, (uint8_t *)dropSensor4, 6);
+	 // HAL_Delay(2000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

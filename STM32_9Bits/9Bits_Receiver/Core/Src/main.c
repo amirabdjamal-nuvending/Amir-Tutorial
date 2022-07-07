@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stdlib.h"
+#include "string.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,7 +41,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- UART_HandleTypeDef huart2;
+ UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
@@ -52,16 +55,83 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t count = 0;
-uint8_t Rx_data[20];
-uint8_t Tx1_data[] = {0x01,0x05,0x00,0xB1,0x48};
-uint8_t Tx2_data[] = {0x02,0x05,0x00,0xB2,0x49};
+
+uint8_t Rx_data_from_stc[5];
+uint8_t receivedData4G[2];
+uint8_t Transmit_To_DTU;
+
+uint8_t Drop_Success[5] = {0x0FB,  0x002,  0x005,  0x000,  0x0FB};
+uint8_t Drop_Not_Success[5] = {0x0FB,  0x002,  0x002,  0x000,  0x0FB};
+uint8_t Motor_Error[5] = {0x0FB,  0x002,  0x000,  0x000,  0x0FB};
+
+
+uint16_t A1[6] = {0x1FB,  0x102,  0x106,  0x10A,  0x101,  0x1FB};
+uint16_t A2[6] = {0x1FB,  0x102,  0x106,  0x109,  0x101,  0x1FB};
+uint16_t A3[6] = {0x1FB,  0x102,  0x106,  0x108,  0x101,  0x1FB};
+uint16_t A4[6] = {0x1FB,  0x102,  0x106,  0x107,  0x101,  0x1FB};
+uint16_t A5[6] = {0x1FB,  0x102,  0x106,  0x106,  0x101,  0x1FB};
+uint16_t A6[6] = {0x1FB,  0x102,  0x106,  0x105,  0x101,  0x1FB};
+uint16_t A7[6] = {0x1FB,  0x102,  0x106,  0x104,  0x101,  0x1FB};
+uint16_t A8[6] = {0x1FB,  0x102,  0x106,  0x103,  0x101,  0x1FB};
+uint16_t A9[6] = {0x1FB,  0x102,  0x106,  0x102,  0x101,  0x1FB};
+uint16_t A10[6] ={0x1FB,  0x102,  0x106,  0x101,  0x101,  0x1FB};
+uint16_t B1[6] = {0x1FB,  0x102,  0x105,  0x10A,  0x101,  0x1FB};
+uint16_t B2[6] = {0x1FB,  0x102,  0x105,  0x109,  0x101,  0x1FB};
+uint16_t B3[6] = {0x1FB,  0x102,  0x105,  0x108,  0x101,  0x1FB};
+uint16_t B4[6] = {0x1FB,  0x102,  0x105,  0x107,  0x101,  0x1FB};
+uint16_t B5[6] = {0x1FB,  0x102,  0x105,  0x106,  0x101,  0x1FB};
+uint16_t B6[6] = {0x1FB,  0x102,  0x105,  0x105,  0x101,  0x1FB};
+uint16_t B7[6] = {0x1FB,  0x102,  0x105,  0x104,  0x101,  0x1FB};
+uint16_t B8[6] = {0x1FB,  0x102,  0x105,  0x103,  0x101,  0x1FB};
+uint16_t B9[6] = {0x1FB,  0x102,  0x105,  0x102,  0x101,  0x1FB};
+uint16_t B10[6] ={0x1FB,  0x102,  0x105,  0x101,  0x101,  0x1FB};
+uint16_t C1[6] = {0x1FB,  0x102,  0x104,  0x10A,  0x101,  0x1FB};
+uint16_t C2[6] = {0x1FB,  0x102,  0x104,  0x109,  0x101,  0x1FB};
+uint16_t C3[6] = {0x1FB,  0x102,  0x104,  0x108,  0x101,  0x1FB};
+uint16_t C4[6] = {0x1FB,  0x102,  0x104,  0x107,  0x101,  0x1FB};
+uint16_t C5[6] = {0x1FB,  0x102,  0x104,  0x106,  0x101,  0x1FB};
+uint16_t C6[6] = {0x1FB,  0x102,  0x104,  0x105,  0x101,  0x1FB};
+uint16_t C7[6] = {0x1FB,  0x102,  0x104,  0x104,  0x101,  0x1FB};
+uint16_t C8[6] = {0x1FB,  0x102,  0x104,  0x103,  0x101,  0x1FB};
+uint16_t C9[6] = {0x1FB,  0x102,  0x104,  0x102,  0x101,  0x1FB};
+uint16_t C10[6] ={0x1FB,  0x102,  0x104,  0x101,  0x101,  0x1FB};
+uint16_t D1[6] = {0x1FB,  0x102,  0x103,  0x10A,  0x101,  0x1FB};
+uint16_t D2[6] = {0x1FB,  0x102,  0x103,  0x109,  0x101,  0x1FB};
+uint16_t D3[6] = {0x1FB,  0x102,  0x103,  0x108,  0x101,  0x1FB};
+uint16_t D4[6] = {0x1FB,  0x102,  0x103,  0x107,  0x101,  0x1FB};
+uint16_t D5[6] = {0x1FB,  0x102,  0x103,  0x106,  0x101,  0x1FB};
+uint16_t D6[6] = {0x1FB,  0x102,  0x103,  0x105,  0x101,  0x1FB};
+uint16_t D7[6] = {0x1FB,  0x102,  0x103,  0x104,  0x101,  0x1FB};
+uint16_t D8[6] = {0x1FB,  0x102,  0x103,  0x103,  0x101,  0x1FB};
+uint16_t D9[6] = {0x1FB,  0x102,  0x103,  0x102,  0x101,  0x1FB};
+uint16_t D10[6] ={0x1FB,  0x102,  0x103,  0x101,  0x101,  0x1FB};
+uint16_t E1[6] = {0x1FB,  0x102,  0x102,  0x10A,  0x101,  0x1FB};
+uint16_t E2[6] = {0x1FB,  0x102,  0x102,  0x109,  0x101,  0x1FB};
+uint16_t E3[6] = {0x1FB,  0x102,  0x102,  0x108,  0x101,  0x1FB};
+uint16_t E4[6] = {0x1FB,  0x102,  0x102,  0x107,  0x101,  0x1FB};
+uint16_t E5[6] = {0x1FB,  0x102,  0x102,  0x106,  0x101,  0x1FB};
+uint16_t E6[6] = {0x1FB,  0x102,  0x102,  0x105,  0x101,  0x1FB};
+uint16_t E7[6] = {0x1FB,  0x102,  0x102,  0x104,  0x101,  0x1FB};
+uint16_t E8[6] = {0x1FB,  0x102,  0x102,  0x103,  0x101,  0x1FB};
+uint16_t E9[6] = {0x1FB,  0x102,  0x102,  0x102,  0x101,  0x1FB};
+uint16_t E10[6] ={0x1FB,  0x102,  0x102,  0x101,  0x101,  0x1FB};
+uint16_t F1[6] = {0x1FB,  0x102,  0x101,  0x10A,  0x101,  0x1FB};
+uint16_t F2[6] = {0x1FB,  0x102,  0x101,  0x109,  0x101,  0x1FB};
+uint16_t F3[6] = {0x1FB,  0x102,  0x101,  0x108,  0x101,  0x1FB};
+uint16_t F4[6] = {0x1FB,  0x102,  0x101,  0x107,  0x101,  0x1FB};
+uint16_t F5[6] = {0x1FB,  0x102,  0x101,  0x106,  0x101,  0x1FB};
+uint16_t F6[6] = {0x1FB,  0x102,  0x101,  0x105,  0x101,  0x1FB};
+uint16_t F7[6] = {0x1FB,  0x102,  0x101,  0x104,  0x101,  0x1FB};
+uint16_t F8[6] = {0x1FB,  0x102,  0x101,  0x103,  0x101,  0x1FB};
+uint16_t F9[6] = {0x1FB,  0x102,  0x101,  0x102,  0x101,  0x1FB};
+uint16_t F10[6] ={0x1FB,  0x102,  0x101,  0x101,  0x101,  0x1FB};
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -70,10 +140,404 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	//HAL_UART_Transmit_IT(&huart2, Tx1_data, sizeof(Tx1_data));
-	HAL_UART_Receive_DMA(&huart2, Rx_data, 20); //restart the interupt reception mode
-	//Rx_data[0] = 0; Rx_data[1] = 0; Rx_data[2] = 0; Rx_data[3] = 0; Rx_data[4] = 0;
+	HAL_UART_Receive_DMA(&huart2, Rx_data_from_stc, 5); //restart the interupt reception mode
+	if (strcmp(Rx_data_from_stc, Drop_Success) == 0){
+		HAL_UART_Transmit_IT(&huart1, "Drop Sensor Success!", 5);
+	}
+	else if (strcmp(Rx_data_from_stc, Drop_Not_Success) == 0){
+		HAL_UART_Transmit_IT(&huart1, "Drop Sensor Not Success!", 5);
+	}
+	else if (strcmp(Rx_data_from_stc, Drop_Not_Success) == 0){
+		HAL_UART_Transmit_IT(&huart1, "Motor Error", 5);
+	}
+	else{
+
+	}
+
+
 }
+
+void receive_transmit_command(void){
+
+	HAL_UART_Receive_IT(&huart1,receivedData4G, 2);
+
+	/////TRAY A/////
+	if(strcmp(receivedData4G, "A1") == 0){       		//A1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	}
+
+	 else if (strcmp(receivedData4G, "A2") == 0){       //A2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A3") == 0){       //A3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A4") == 0){       //A4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A5") == 0){       //A5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A6") == 0){       //A6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A7") == 0){       //A7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A8") == 0){       //A8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "A9") == 0){       //A9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "AA") == 0){       //A10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)A10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 /////TRAY B/////
+	 else if (strcmp(receivedData4G, "B1") == 0){       //B1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B2") == 0){       //B2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B3") == 0){       //B3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B4") == 0){       //B4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B5") == 0){       //B5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B6") == 0){       //B6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B7") == 0){       //B7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B8") == 0){       //B8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "B9") == 0){       //B9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "BB") == 0){       //B10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)B10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 /////TRAY C/////
+	 else if (strcmp(receivedData4G, "C1") == 0){       //C1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C2") == 0){       //C2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C3") == 0){       //C3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C4") == 0){       //C4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C5") == 0){       //C5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C6") == 0){       //C6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C7") == 0){       //C7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C8") == 0){       //C8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "C9") == 0){       //C9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "CC") == 0){       //C10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)C10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 /////TRAY D/////
+	 else if (strcmp(receivedData4G, "D1") == 0){       //D1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D2") == 0){       //D2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D3") == 0){       //D3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D4") == 0){       //D4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D5") == 0){       //D5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D6") == 0){       //D6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D7") == 0){       //D7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D8") == 0){       //D8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "D9") == 0){       //D9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "DD") == 0){       //D10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)D10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 /////TRAY E/////
+	 else if (strcmp(receivedData4G, "E1") == 0){       //E1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E2") == 0){       //E2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E3") == 0){       //E3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E4") == 0){       //E4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E5") == 0){       //E5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E6") == 0){       //E6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E7") == 0){       //E7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E8") == 0){       //E8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "E9") == 0){       //E9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "EE") == 0){       //E10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)E10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 /////TRAY F/////
+	 else if (strcmp(receivedData4G, "F1") == 0){       //F1
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F1, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F2") == 0){       //F2
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F2, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F3") == 0){       //F3
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F3, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F4") == 0){       //F4
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F4, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F5") == 0){       //F5
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F5, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F6") == 0){       //F6
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F6, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F7") == 0){       //F7
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F7, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F8") == 0){       //F8
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F8, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "F9") == 0){       //F9
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F9, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+	 else if (strcmp(receivedData4G, "FF") == 0){       //F10
+	     HAL_UART_Transmit_IT(&huart2, (uint8_t *)F10, 6);
+	     HAL_Delay(2000);
+	     receivedData4G[0] = 0;
+	     receivedData4G[1] = 0;
+	  }
+
+	 else {
+//		 char buffer[16];
+//		 HAL_UART_Transmit(&huart1, (uint8_t*)buffer, sprintf(buffer, "%s", invalidCommand), 500);
+//		 receivedData4G[0] = 0;
+//		 receivedData4G[1] = 0;
+	 }
+
+}
+
 
 /* USER CODE END 0 */
 
@@ -107,9 +571,12 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART2_UART_Init();
-
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart2, Rx_data, 20);
+//  HAL_UART_Transmit_IT(&huart2, (uint8_t *)A1, 6);
+//  HAL_Delay(2000);
+
+//  HAL_UART_Receive_DMA(&huart2, Rx_data, 20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -117,7 +584,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+//	  HAL_UART_Receive_DMA(&huart2, Rx_data, 20);
+	  receive_transmit_command();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -160,6 +628,39 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
+
 }
 
 /**
