@@ -72,6 +72,7 @@ uint8_t Drop_Not_Success[5] = {0x0FB,  0x002,  0x002,  0x000,  0x0FB};
 uint8_t Motor_Error[5] = {0x0FB,  0x002,  0x000,  0x000,  0x0FB};
 
 uint8_t dapat[2];
+uint8_t masuk[2];
 
 
 uint16_t A1[6] = {0x1FB,  0x102,  0x106,  0x10A,  0x101,  0x1FB};
@@ -149,7 +150,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		dapat[1] = 2;
 	}
 	else if (strcmp(Rx_data_from_stc, Drop_Not_Success) == 0){
-		HAL_UART_Transmit_IT(&huart1, "AAAAAAAAAAA", 5);
+		HAL_UART_Transmit_IT(&huart1, "AAAAA", 5);
 		dapat[0] = 3;
 		dapat[1] = 3;
 	}
