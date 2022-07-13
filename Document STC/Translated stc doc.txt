@@ -1,0 +1,25 @@
+1.2 Single Motor Dispensing 
+
+PC 
+----->> FC 02 Row Column xx FB (ini adalah command)
+
+Input untuk "xx" dalam command
+
+0 spiral motor mode (Without drop box sensor)
+1 spiral motor mode (With drop box sensor)
+2 Conveyor belt (with drop sensor)
+3 Conveyor belt (without drop sensor)
+4 Somekind of hook up mode (with drop sensor)
+5 Somekind of hook up mode (without drop sensor)
+
+The bottom part is the result return commands. Follow the order :
+
+-Motor invalid
+-Motor is not in home position
+-SKU stuck
+-SKU stuck + extra 1/4 turn
+-SKU release success
+-SKU release success + extra 1/4 turn
+- conveyor belt infrared sensor error, SKU release fail
+- slot connection (short circuit)
+
