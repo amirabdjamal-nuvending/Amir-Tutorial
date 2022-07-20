@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_line   0000d2f1  00000000  00000000  00047712  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008bb20  00000000  00000000  00054a03  2**0
+ 18 .debug_str    0008bb33  00000000  00000000  00054a03  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000e0523  2**0
+ 19 .comment      00000050  00000000  00000000  000e0536  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004aac  00000000  00000000  000e0574  2**2
+ 20 .debug_frame  00004aac  00000000  00000000  000e0588  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1300,9 +1300,9 @@ Disassembly of section .text:
  8000f56:	bf00      	nop
 
 08000f58 <delay>:
-float Temperature = 0;
-char TempString[4];
-uint8_t Presence = 0;
+
+
+/**************************** Milliseconds Delay Function ****************************/
 
 void delay (uint32_t us)
 {
@@ -1334,6 +1334,8 @@ void delay (uint32_t us)
  8000f84:	200004e0 	.word	0x200004e0
 
 08000f88 <Set_Pin_Output>:
+
+/**************************** Set Pin as Input/Output for Temperature Sensor ****************************/
 
 void Set_Pin_Output (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 {
@@ -1411,7 +1413,7 @@ void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
  8001000:	40010800 	.word	0x40010800
 
 08001004 <DS18B20_Start>:
-/**************************** DS18B20 FUNCTIONS ****************************/
+/**************************** DS18B20/Temperature Sensor Functions ****************************/
 #define DS18B20_PORT GPIOA
 #define DS18B20_PIN GPIO_PIN_7
 
@@ -1642,7 +1644,7 @@ uint8_t DS18B20_Read (void)
 0800116c <HAL_UART_TxCpltCallback>:
 /**************************** UART CALLBACK FUNCTIONS ****************************/
 
-char Tx_buff[20];
+char Tx_buff[20]; //String from STM32 to DTU is sent using this buffer
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -1650,7 +1652,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
  800116e:	b083      	sub	sp, #12
  8001170:	af00      	add	r7, sp, #0
  8001172:	6078      	str	r0, [r7, #4]
-	//HAL_UART_Transmit_IT(&huart2, Tx_data, sizeof(Tx_data));
+	//HAL_UART_Transmit_IT(&huart2, Tx_buff, sizeof(Tx_buff));
 }
  8001174:	bf00      	nop
  8001176:	370c      	adds	r7, #12
@@ -1782,12 +1784,12 @@ void write_read_Temperature(){
 }
  800125c:	bf00      	nop
  800125e:	bd80      	pop	{r7, pc}
- 8001260:	200006e0 	.word	0x200006e0
- 8001264:	200006d2 	.word	0x200006d2
- 8001268:	200006d3 	.word	0x200006d3
- 800126c:	200006d4 	.word	0x200006d4
- 8001270:	200006d8 	.word	0x200006d8
- 8001274:	200006dc 	.word	0x200006dc
+ 8001260:	200006dc 	.word	0x200006dc
+ 8001264:	200006d0 	.word	0x200006d0
+ 8001268:	200006d1 	.word	0x200006d1
+ 800126c:	200006d2 	.word	0x200006d2
+ 8001270:	200006d4 	.word	0x200006d4
+ 8001274:	200006d8 	.word	0x200006d8
 
 08001278 <transmit_Data_to_DTU>:
 
@@ -1929,10 +1931,10 @@ void transmit_Data_to_DTU(){
  8001358:	20000000 	.word	0x20000000
  800135c:	200006c0 	.word	0x200006c0
  8001360:	200006cc 	.word	0x200006cc
- 8001364:	200006dc 	.word	0x200006dc
+ 8001364:	200006d8 	.word	0x200006d8
  8001368:	08007ff0 	.word	0x08007ff0
  800136c:	200006e4 	.word	0x200006e4
- 8001370:	200006d0 	.word	0x200006d0
+ 8001370:	200006e0 	.word	0x200006e0
  8001374:	20000528 	.word	0x20000528
  8001378:	20000008 	.word	0x20000008
  800137c:	20000010 	.word	0x20000010
@@ -3639,7 +3641,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  /**************************** Uart Transmit & Receive ****************************/
+	  /**************************** UART Transmit & Receive ****************************/
 	  receive_Command_from_DTU();
  80020ba:	f7ff f963 	bl	8001384 <receive_Command_from_DTU>
 	  transmit_Data_to_DTU();

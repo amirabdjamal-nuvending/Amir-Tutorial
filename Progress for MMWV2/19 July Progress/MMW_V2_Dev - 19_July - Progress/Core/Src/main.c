@@ -20,8 +20,6 @@
 #include "main.h"
 #include "string.h"
 #include "stdio.h"
-//#include "Timing.hpp"
-//#include "DS18B20.hpp"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -90,15 +88,16 @@ float Temperature = 0; //Temperature value in Celcius
 char TempString[4];
 uint8_t Presence = 0;
 
-uint8_t dapat[2];//For debug purpose
-
 /**************************** Single Motor Hex Return ****************************/
 
 uint8_t Drop_Success[5] = {0xFB,  0x02,  0x05,  0x00,  0xFB};
 uint8_t Drop_Not_Success[5] = {0xFB,  0x02,  0x02,  0x00,  0xFB};
 uint8_t Motor_Error[5] = {0xFB,  0x02,  0x00,  0x00,  0xFB};
 
-/**************************** Single Motor Hex Command ****************************/
+uint8_t dapat[2];//For debug purpose
+
+
+/**************************** Single Motor Dispensing Hex Command ****************************/
 
 uint16_t A1[6] = {0xFB,  0x02,  0x06,  0x0A,  0x01,  0xFB};
 uint16_t A2[6] = {0xFB,  0x02,  0x06,  0x09,  0x01,  0xFB};
@@ -160,6 +159,7 @@ uint16_t F7[6] = {0xFB,  0x02,  0x01,  0x04,  0x01,  0xFB};
 uint16_t F8[6] = {0xFB,  0x02,  0x01,  0x03,  0x01,  0xFB};
 uint16_t F9[6] = {0xFB,  0x02,  0x01,  0x02,  0x01,  0xFB};
 uint16_t F10[6] ={0xFB,  0x02,  0x01,  0x01,  0x01,  0xFB};
+
 
 /**************************** Milliseconds Delay Function ****************************/
 
@@ -770,7 +770,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  /**************************** Uart Transmit & Receive ****************************/
+	  /**************************** UART Transmit & Receive ****************************/
 	  receive_Command_from_DTU();
 	  transmit_Data_to_DTU();
 	  /**************************** DS18B20 ****************************/
