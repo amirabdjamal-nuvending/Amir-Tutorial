@@ -73,6 +73,9 @@ static void MX_TIM1_Init(void);
 uint8_t Rx_data_from_stc[5];
 uint8_t receivedData4G[2];
 
+uint8_t * receivedDataString[3];//to hold split string
+int startSplit = 0;
+
 /**************************** Drop & Door Sensors Status ****************************/
 
 int Drop_Status = 0; // -1 = DropFail, 0 = NoDrop, 1 = DropSuccess
@@ -91,7 +94,7 @@ uint8_t Presence = 0;
 /**************************** String and Hex Constant ****************************/
 
 char motor_First_String[6] = {'A', 'B', 'C', 'D', 'E', 'F'};
-char motor_Second_String[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '10'};
+char motor_Second_String[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 uint16_t STX = 0xFB; //start byte
 uint16_t ENX = 0xFB; //end byte
@@ -293,11 +296,36 @@ void transmit_Data_to_DTU(){
 	}
 }
 
+void split_Command_from_DTU(){
+	for(int i = 0; i < sizeof(receivedData4G); i++){
+	  if(receivedData4G[i] != '\0'){
+		  continue;
+	  }
+	  else{
+		  startSplit = 1;
+		  break;
+	  }
+    }
+
+	 if(startSplit == 1){
+		uint8_t *token = strtok(receivedData4G, "_");
+		int j = 0;
+
+		while (token != NULL)
+		{
+		  receivedDataString[j++] = token;
+		  token = strtok(NULL, "_");
+		}
+	 }
+}
+
 void concat_Command_for_STC(){
 
 	/************* Set First & End Hex Byte *************/
 	stc_command[0] = STX;
 	stc_command[5] = ENX;
+
+	/************* Set Second & Fifth Hex Byte *************/
 
 	/************* Set Second, Third, Fourth & Fifth Hex Byte (Single Motor Dispensing) *************/
 //	for(int i = 0; i < 6; i++){
@@ -318,14 +346,14 @@ void concat_Command_for_STC(){
 //	}
 
 
-	if((strcmp(receivedData4G[0], motor_First_String[i]) == 0) && (strcmp(receivedData4G[1], motor_Second_String[j]) == 0)){
+	if((strcmp(receivedData4G[0], motor_First_String[0]) == 0) && (strcmp(receivedData4G[1], motor_Second_String[0]) == 0)){
 //		dapat[0] = 6;
 //		dapat[1] = 7;
 		stc_command[1] = SINGLE_MOTOR_DISPENSING;
 		stc_command[4] = SINGLE_MOTOR_DISPENSING_MODE;
 
-		stc_command[2] = row[i];
-		stc_command[3] = column[j];
+		stc_command[2] = row[0];
+		stc_command[3] = column[0];
 		HAL_UART_Transmit_IT(&huart2, stc_command, 6);
 		receivedData4G[0] = 0;
 		receivedData4G[1] = 0;
@@ -415,10 +443,14 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  /**************************** UART Split String ****************************/
+	  split_Command_from_DTU();
+
 	  /**************************** UART Transmit & Receive ****************************/
 	  concat_Command_for_STC();
 	  send_Command_to_STC();
 	  transmit_Data_to_DTU();
+
 	  /**************************** DS18B20 ****************************/
 	  write_read_Temperature();
 
