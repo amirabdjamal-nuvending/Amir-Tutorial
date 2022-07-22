@@ -92,9 +92,10 @@ uint8_t Presence = 0;
 
 /**************************** String and Hex Constant ****************************/
 
-uint8_t motor_First_String[3][7] = {{"single"}, {"test"}, {"RW"}};
-uint8_t motor_Second_String[6] = {'A', 'B', 'C', 'D', 'E', 'F'};
-uint8_t motor_Third_String[15] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+uint8_t motor_First_String[3][8] = {{"single"}, {"test"}, {"RW"}};
+uint8_t motor_Second_String[6][1] = {{"A"}, {"B"}, {"C"}, {"D"}, {"E"}, {"F"}};
+uint8_t motor_Third_String[15][1] = {{"1"}, {"2"}, {"3"}, {"4"}, {"5"}, {"6"}, {"7"}, {"8"}, {"9"},
+		{"A"}, {"B"}, {"C"}, {"D"}, {"E"}, {"F"}};
 
 uint16_t STX = 0xFB; //start byte
 uint16_t ENX = 0xFB; //end byte
@@ -116,7 +117,12 @@ uint8_t Drop_Not_Success[5] = {0xFB,  0x02,  0x02,  0x00,  0xFB};
 uint8_t Motor_Error[5] = {0xFB,  0x02,  0x00,  0x00,  0xFB};
 
 uint8_t dapat[2];//For debug purpose
-uint8_t dapat2[2];
+uint8_t dapatdapat[2];
+uint8_t statusreturn[2];
+
+int h;
+int v;
+int y;
 
 int buffer_available = 0;
 
@@ -237,16 +243,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	HAL_UART_Receive_DMA(&huart2, Rx_data_from_stc, 5); //restart the interupt reception mode
 	HAL_UART_Receive_IT(&huart1,receivedData4G, 15);
-	dapat2[0] = 22;
-	dapat2[1] = 22;
-//	int i = 0;
-//    uint8_t *token = strtok (receivedData4G, "_");
-//    while (token != NULL)
-//    {
-//	  receivedDataString[i++] = token;
-//	  token = strtok (NULL, "_");
-//    }
-
 }
 
 /**************************** LOOPING FUNCTIONS ****************************/
@@ -270,7 +266,6 @@ void write_read_Temperature(){
 	  TEMP = (Temp_byte2<<8)|Temp_byte1;
 	  Temperature = (float)TEMP/16;
 	  gcvt(Temperature, 4, TempString);
-	  //HAL_Delay(3000);
 }
 
 void transmit_Data_to_DTU(){
@@ -278,8 +273,8 @@ void transmit_Data_to_DTU(){
 	if (strcmp(Rx_data_from_stc, Drop_Success) == 0){
 		Drop_Status = 1;
 		sprintf(Tx_buff, "%s_%d", TempString, Drop_Status);
-		dapat[0] = 2;
-		dapat[1] = 2;
+		statusreturn[0] = 2;
+		statusreturn[1] = 2;
 		HAL_UART_Transmit_IT(&huart1, Tx_buff, sizeof(Tx_buff));
 		for(int i = 0; i < sizeof(Rx_data_from_stc); i++){
 			Rx_data_from_stc[i] = 0;
@@ -289,8 +284,8 @@ void transmit_Data_to_DTU(){
 	else if (strcmp(Rx_data_from_stc, Drop_Not_Success) == 0){
 		Drop_Status = -1;
 		sprintf(Tx_buff, "%s_%d", TempString, Drop_Status);
-		dapat[0] = 3;
-		dapat[1] = 3;
+		statusreturn[0] = 3;
+		statusreturn[1] = 3;
 		HAL_UART_Transmit_IT(&huart1, Tx_buff, sizeof(Tx_buff));
 		for(int i = 0; i < sizeof(Rx_data_from_stc); i++){
 			Rx_data_from_stc[i] = 0;
@@ -298,43 +293,45 @@ void transmit_Data_to_DTU(){
 	}
 	else if (strcmp(Rx_data_from_stc, Motor_Error) == 0){
 		HAL_UART_Transmit_IT(&huart1, "ME\n", 5);
-		dapat[0] = 4;
-		dapat[1] = 4;
+		statusreturn[0] = 4;
+		statusreturn[1] = 4;
 	}
 	else{
 
 	}
+	HAL_Delay(2000);
+	statusreturn[0] = 0;
+	statusreturn[1] = 0;
+}
+
+void split_Command_from_DTU(){
+	dapat[0] = 99;
+	dapat[1] = 99;
+	char *token;
+	char* rest = receivedData4G;
+	int j = 0;
+
+	while ((token = strtok_r(rest, "_", &rest)))
+	{
+		receivedDataString[j++] = token;
+	}
+	HAL_Delay(2000);
 }
 
 
 void concat_Command_for_STC(){
-	dapat[0] = 5;
-	dapat[1] = 5;
+	dapat[0] = 88;
+	dapat[1] = 88;
 
-	if(receivedData4G[0] != 0 && receivedData4G[1] != 0 && receivedData4G[2] != 0 && receivedData4G[3] != 0
-			 && receivedData4G[4] != 0 && receivedData4G[5] != 0 && receivedData4G[6] != 0
-			 && receivedData4G[7] != 0 && receivedData4G[8] != 0 && receivedData4G[9] != 0
-			 && receivedData4G[10] != 0 && receivedData4G[11] != 0 && receivedData4G[12] != 0
-			 && receivedData4G[13] != 0 && receivedData4G[14] != 0)
-	{
-		buffer_Available = 1;
+	if(strcmp(receivedDataString[0], motor_First_String[0]) == 0){
+		h = 1;
 	}
-
-
-		uint8_t *token = strtok (receivedData4G, "_");
-		while (token != NULL)
-		{
-		  receivedDataString[i++] = token;
-		  token = strtok (NULL, "_");
-		}
-		for(int j = 0; j < sizeof(receivedData4G); j++){
-		  receivedData4G[j] = 0;
-		}
+	if(strncmp(receivedDataString[1], motor_Second_String[0], 1) == 0){
+		v = 1;
 	}
-	else{
-
+	if(strncmp(receivedDataString[2], motor_Third_String[0], 1) == 0){
+		y = 1;
 	}
-
 
 	/************* Set First & End Hex Byte *************/
 	stc_command[0] = STX;
@@ -358,23 +355,23 @@ void concat_Command_for_STC(){
 	}
 
 	/************* Set Third Hex Byte *************/
-
-	if(strcmp(receivedDataString[1], motor_Second_String[0]) == 0){
+	if(strncmp(receivedDataString[1], motor_Second_String[0], 1) == 0){
 		stc_command[2] = row[0];// ------------------------------------------>A = 0x06
+		dapatdapat[0] = 77;
 	}
-	else if (strcmp(receivedDataString[1], motor_Second_String[1]) == 0){
+	else if (strncmp(receivedDataString[1], motor_Second_String[1], 1) == 0){
 		stc_command[2] = row[1];// ------------------------------------------>B = 0x05
 	}
-	else if (strcmp(receivedDataString[1], motor_Second_String[2]) == 0){
+	else if (strncmp(receivedDataString[1], motor_Second_String[2], 1) == 0){
 		stc_command[2] = row[2];// ------------------------------------------>C = 0x04
 	}
-	else if (strcmp(receivedDataString[1], motor_Second_String[3]) == 0){
+	else if (strncmp(receivedDataString[1], motor_Second_String[3], 1) == 0){
 		stc_command[2] = row[3];// ------------------------------------------>D = 0x03
 	}
-	else if (strcmp(receivedDataString[1], motor_Second_String[4]) == 0){
+	else if (strncmp(receivedDataString[1], motor_Second_String[4], 1) == 0){
 		stc_command[2] = row[4];// ------------------------------------------>E = 0x02
 	}
-	else if (strcmp(receivedDataString[1], motor_Second_String[5]) == 0){
+	else if (strncmp(receivedDataString[1], motor_Second_String[5], 1) == 0){
 		stc_command[2] = row[5];// ------------------------------------------>F = 0x01
 	}
 	else{
@@ -383,56 +380,65 @@ void concat_Command_for_STC(){
 
 	/************* Set Fourth Hex Byte *************/
 
-	if(strcmp(receivedDataString[2], motor_Third_String[0]) == 0){
-		stc_command[2] = column[0];// ------------------------------------------>1 = 0x0A
+	if(strncmp(receivedDataString[2], motor_Third_String[0], 1) == 0){
+		stc_command[3] = column[0];// ------------------------------------------>1 = 0x0A
+		dapatdapat[1] = 11;
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[1]) == 0){
-		stc_command[2] = column[1];// ------------------------------------------>2 = 0x09
+	else if (strncmp(receivedDataString[2], motor_Third_String[1], 1) == 0){
+		stc_command[3] = column[1];// ------------------------------------------>2 = 0x09
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[2]) == 0){
-		stc_command[2] = column[2];// ------------------------------------------>3 = 0x08
+	else if (strncmp(receivedDataString[2], motor_Third_String[2], 1) == 0){
+		stc_command[3] = column[2];// ------------------------------------------>3 = 0x08
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[3]) == 0){
-		stc_command[2] = column[3];// ------------------------------------------>4 = 0x07
+	else if (strncmp(receivedDataString[2], motor_Third_String[3], 1) == 0){
+		stc_command[3] = column[3];// ------------------------------------------>4 = 0x07
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[4]) == 0){
-		stc_command[2] = column[4];// ------------------------------------------>5 = 0x06
+	else if (strncmp(receivedDataString[2], motor_Third_String[4], 1) == 0){
+		stc_command[3] = column[4];// ------------------------------------------>5 = 0x06
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[5]) == 0){
-		stc_command[2] = column[5];// ------------------------------------------>6 = 0x05
+	else if (strncmp(receivedDataString[2], motor_Third_String[5], 1) == 0){
+		stc_command[3] = column[5];// ------------------------------------------>6 = 0x05
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[6]) == 0){
-		stc_command[2] = column[6];// ------------------------------------------>7 = 0x04
+	else if (strncmp(receivedDataString[2], motor_Third_String[6], 1) == 0){
+		stc_command[3] = column[6];// ------------------------------------------>7 = 0x04
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[7]) == 0){
-		stc_command[2] = column[7];// ------------------------------------------>8 = 0x03
+	else if (strncmp(receivedDataString[2], motor_Third_String[7], 1) == 0){
+		stc_command[3] = column[7];// ------------------------------------------>8 = 0x03
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[8]) == 0){
-		stc_command[2] = column[8];// ------------------------------------------>9 = 0x02
+	else if (strncmp(receivedDataString[2], motor_Third_String[8], 1) == 0){
+		stc_command[3] = column[8];// ------------------------------------------>9 = 0x02
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[9]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>A = 0x01 for AA / 10A
+	else if (strncmp(receivedDataString[2], motor_Third_String[9], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>A = 0x01 for AA / 10A
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[10]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>B = 0x01 for BB / 10B
+	else if (strncmp(receivedDataString[2], motor_Third_String[10], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>B = 0x01 for BB / 10B
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[11]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>C = 0x01 for CC / 10C
+	else if (strncmp(receivedDataString[2], motor_Third_String[11], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>C = 0x01 for CC / 10C
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[12]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>D = 0x01 for DD / 10D
+	else if (strncmp(receivedDataString[2], motor_Third_String[12], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>D = 0x01 for DD / 10D
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[13]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>E = 0x01 for EE / 10E
+	else if (strncmp(receivedDataString[2], motor_Third_String[13], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>E = 0x01 for EE / 10E
 	}
-	else if (strcmp(receivedDataString[2], motor_Third_String[14]) == 0){
-		stc_command[2] = column[9];// ------------------------------------------>F = 0x01 for FF / 10F
+	else if (strncmp(receivedDataString[2], motor_Third_String[14], 1) == 0){
+		stc_command[3] = column[9];// ------------------------------------------>F = 0x01 for FF / 10F
 	}
 	else{
 
 	}
 
-
+	HAL_UART_Transmit_IT(&huart2, stc_command, 6);
+	HAL_Delay(2000);
+	for(int i = 0; i < sizeof(receivedData4G); i++){
+		receivedData4G[i] = '\0';
+	}
+	for(int i = 0; i < 2; i++){
+			dapat[i] = 0;
+			dapatdapat[i] = 0;
+	}
 }
 
 void send_Command_to_STC(void){
@@ -487,9 +493,6 @@ int main(void)
   HAL_TIM_Base_Start(&htim1);
   HAL_UART_Receive_DMA(&huart2, Rx_data_from_stc, 5);
   HAL_UART_Receive_IT(&huart1,receivedData4G, 15);
-//  for(int j = 0; j < sizeof(receivedData4G); j++){
-//	  receivedData4G[j] = 0;
-//  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -497,8 +500,17 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  /**************************** UART Split ****************************/
+	  if(receivedData4G[0] != '\0' || receivedData4G[1] != '\0' || receivedData4G[2] != '\0' || receivedData4G[3] != '\0' ||
+			  receivedData4G[4] != '\0' || receivedData4G[5] != '\0' || receivedData4G[6] != '\0' || receivedData4G[7] != '\0' ||
+			  receivedData4G[8] != '\0' || receivedData4G[9] != '\0' || receivedData4G[10] != '\0' || receivedData4G[11] != '\0' ||
+			  receivedData4G[12] != '\0' || receivedData4G[13] != '\0' || receivedData4G[14] != '\0'){
+		  split_Command_from_DTU();
+		  concat_Command_for_STC();
+	  }
 	  /**************************** UART Transmit & Receive ****************************/
-	  concat_Command_for_STC();
+
+	  //concat_Command_for_STC();
 	  send_Command_to_STC();
 	  transmit_Data_to_DTU();
 	  /**************************** DS18B20 ****************************/

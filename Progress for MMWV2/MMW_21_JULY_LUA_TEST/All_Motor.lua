@@ -29,8 +29,8 @@ local function Run_All()
         --pm.wake("UART_SENT2MCU")
         --uart.on(uartID)
         --uart.setup(uartID,9600,8,uart.PAR_NONE,uart.STOP_1,nil,1)
-        local SINGLE_MOTOR_DISPENSE = "single_"
-        local TEST_MOTOR = "test_"
+        local SINGLE_MOTOR_DISPENSE = "sng_"
+        local TEST_MOTOR = "tst_"
         -- ##### TRAY A #####
         local A1 = "A_1" --FC 02 Row Column xx FB where xx is mode
         local A2 = "A_2"
@@ -123,35 +123,41 @@ local function Run_All()
             -- Calling function to sending data to DB
             mqttOutMsg.PubQos0Drop()
             print("--> Drop <-- ")
-    
+
+    -- ===========================================================
+        -- ########## Single Motor Dispensing ##########
+    -- ===========================================================
+
+    -- ===========================================================
+        -- ########## COLOUM 1 / A ##########
+    -- ===========================================================
         
-        elseif string.match(InputData , "A1") then
+        elseif string.match(InputData , "P_A1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A1)
             print("UART TX = A1")
             MQTTData = " "
             
-
-        elseif string.match(InputData , "B1") then
+        elseif string.match(InputData , "P_B1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B1)
             print("UART TX = B1")
             MQTTData = " "
         
-        elseif string.match(InputData , "C1") then
+        elseif string.match(InputData , "P_C1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C1)
             print ("UART TX = C1")
             MQTTData = " "
         
-        elseif string.match(InputData , "D1") then
+        elseif string.match(InputData , "P_D1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D1)
             print ("UART TX = D1")
             MQTTData = " "
         
-        elseif string.match(InputData , "E1") then
+        elseif string.match(InputData , "P_E1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E1)
             print ("UART TX = E1")
             MQTTData = " "
         
-        elseif string.match(InputData , "F1") then
+        elseif string.match(InputData , "P_F1") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F1)
             print ("UART TX = F1")
             MQTTData = " "
@@ -159,32 +165,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 2 / B ##########
     -- ===========================================================
-        elseif string.match(InputData , "A2") then
+        elseif string.match(InputData , "P_A2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A2)
             print ("UART TX = A2")
             MQTTData = " "
         
-        elseif string.match(InputData , "B2") then
+        elseif string.match(InputData , "P_B2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B2)
             print ("UART TX = B2")
             MQTTData = " "
         
-        elseif string.match(InputData , "C2") then
+        elseif string.match(InputData , "P_C2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C2)
             print ("UART TX = C2")
             MQTTData = " "
         
-        elseif string.match(InputData , "D2") then
+        elseif string.match(InputData , "P_D2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D2)
             print ("UART TX = D2")
             MQTTData = " "
         
-        elseif string.match(InputData , "E2") then
+        elseif string.match(InputData , "P_E2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E2)
             print ("UART TX = E5")
             MQTTData = " "
         
-        elseif string.match(InputData , "F2") then
+        elseif string.match(InputData , "P_F2") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F2)
             print ("UART TX = F2")
             MQTTData = " "
@@ -192,32 +198,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 3 / C ##########
     -- ===========================================================
-        elseif string.match(InputData , "A3") then
+        elseif string.match(InputData , "P_A3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A3)
             print ("UART TX = A3")
             MQTTData = " "
 
-        elseif string.match(InputData , "B3") then
+        elseif string.match(InputData , "P_B3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B3)
             print ("UART TX = B3")
             MQTTData = " "
 
-        elseif string.match(InputData , "C3") then
+        elseif string.match(InputData , "P_C3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C3)
             print ("UART TX = C3")
             MQTTData = " "
             
-        elseif string.match(InputData , "D3") then
+        elseif string.match(InputData , "P_D3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D3)
             print ("UART TX = D3")
             MQTTData = " "
         
-        elseif string.match(InputData , "E3") then
+        elseif string.match(InputData , "P_E3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E3)
             print ("UART TX = E3")
             MQTTData = " "
 
-        elseif string.match(InputData , "F3") then
+        elseif string.match(InputData , "P_F3") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F3)
             print ("UART TX = F3")
             MQTTData = " "
@@ -225,32 +231,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 4 / D ##########
     -- ===========================================================
-        elseif string.match(InputData , "A4") then
+        elseif string.match(InputData , "P_A4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A4)
             print ("UART TX = A4")
             MQTTData = " "
 
-        elseif string.match(InputData , "B4") then
+        elseif string.match(InputData , "P_B4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B4)
             print ("UART TX = B4")
             MQTTData = " "
 
-        elseif string.match(InputData , "C4") then
+        elseif string.match(InputData , "P_C4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C4)
             print ("UART TX = C4")
             MQTTData = " "
             
-        elseif string.match(InputData , "D4") then
+        elseif string.match(InputData , "P_D4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D4)
             print ("UART TX = D4")
             MQTTData = " "
 
-        elseif string.match(InputData , "E4") then
+        elseif string.match(InputData , "P_E4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E4)
             print ("UART TX = E4")
             MQTTData = " "
 
-        elseif string.match(InputData , "F4") then
+        elseif string.match(InputData , "P_F4") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F4)
             print ("UART TX = F4")
             MQTTData = " "
@@ -258,32 +264,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 5 / E ##########
     -- ===========================================================
-        elseif string.match(InputData , "A5") then
+        elseif string.match(InputData , "P_A5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A5)
             print ("UART TX = A5")
             MQTTData = " "
             
-        elseif string.match(InputData , "B5") then
+        elseif string.match(InputData , "P_B5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B5)
             print ("UART TX = B5")
             MQTTData = " "
 
-        elseif string.match(InputData , "C5") then
+        elseif string.match(InputData , "P_C5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C5)
             print ("UART TX = C5")
             MQTTData = " "
 
-        elseif string.match(InputData , "D5") then
+        elseif string.match(InputData , "P_D5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D5)
             print ("UART TX = D5")
             MQTTData = " "
 
-        elseif string.match(InputData , "E5") then
+        elseif string.match(InputData , "P_E5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E5)
             print ("UART TX = E5")
             MQTTData = " "
 
-        elseif string.match(InputData , "F5") then
+        elseif string.match(InputData , "P_F5") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F5)
             print ("UART TX = F5")
             MQTTData = " "
@@ -291,32 +297,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 6 / F ##########
     -- ===========================================================
-        elseif string.match(InputData , "A6") then
+        elseif string.match(InputData , "P_A6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A6)
             print ("UART TX = A6")
             MQTTData = " "
         
-        elseif string.match(InputData , "B6") then
+        elseif string.match(InputData , "P_B6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B6)
             print ("UART TX = B6")
             MQTTData = " "
 
-        elseif string.match(InputData , "C6") then
+        elseif string.match(InputData , "P_C6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C6)
             print ("UART TX = C6")
             MQTTData = " "
 
-        elseif string.match(InputData , "D6") then
+        elseif string.match(InputData , "P_D6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D6)
             print ("UART TX = D6")
             MQTTData = " "
             
-        elseif string.match(InputData , "E6") then
+        elseif string.match(InputData , "P_E6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E6)
             print ("UART TX = E6")
             MQTTData = " "
 
-        elseif string.match(InputData , "F6") then
+        elseif string.match(InputData , "P_F6") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F6)
             print ("UART TX = F6")
             MQTTData = " "
@@ -324,32 +330,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 7 / G ##########
     -- ===========================================================
-        elseif string.match(InputData , "A7") then
+        elseif string.match(InputData , "P_A7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A7)
             print ("UART TX = A7")
             MQTTData = " "
 
-        elseif string.match(InputData , "B7") then
+        elseif string.match(InputData , "P_B7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B7)
             print ("UART TX = B7")
             MQTTData = " "
             
-        elseif string.match(InputData , "C7") then
+        elseif string.match(InputData , "P_C7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C7)
             print ("UART TX = C7")
             MQTTData = " "
         
-        elseif string.match(InputData , "D7") then
+        elseif string.match(InputData , "P_D7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D7)
             print ("UART TX = D7")
             MQTTData = " "
         
-        elseif string.match(InputData , "E7") then
+        elseif string.match(InputData , "P_E7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E7)
             print ("UART TX = E7")
             MQTTData = " "
         
-        elseif string.match(InputData , "F7") then
+        elseif string.match(InputData , "P_F7") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F7)
             print ("UART TX = F7")
             MQTTData = " "
@@ -357,32 +363,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 8 / H ##########
     -- ===========================================================
-        elseif string.match(InputData , "A8") then
+        elseif string.match(InputData , "P_A8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A8)
             print ("UART TX = A8")
             MQTTData = " "
 
-        elseif string.match(InputData , "B8") then
+        elseif string.match(InputData , "P_B8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B8)
             print ("UART TX = B8")
             MQTTData = " "
 
-        elseif string.match(InputData , "C8") then
+        elseif string.match(InputData , "P_C8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C8)
             print ("UART TX = C8")
             MQTTData = " "
 
-        elseif string.match(InputData , "D8") then
+        elseif string.match(InputData , "P_D8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D8)
             print ("UART TX = D8")
             MQTTData = " "
 
-        elseif string.match(InputData , "E8") then
+        elseif string.match(InputData , "P_E8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E8)
             print ("UART TX = E8")
             MQTTData = " "
 
-        elseif string.match(InputData , "F8") then
+        elseif string.match(InputData , "P_F8") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F8)
             print ("UART TX = F8")
             MQTTData = " "
@@ -390,32 +396,32 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 9 / I ##########
     -- ===========================================================
-        elseif string.match(InputData , "A9") then
+        elseif string.match(InputData , "P_A9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A9)
             print ("UART TX = A9")
             MQTTData = " "
 
-        elseif string.match(InputData , "B9") then
+        elseif string.match(InputData , "P_B9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B9)
             print ("UART TX = B9")
             MQTTData = " "
 
-        elseif string.match(InputData , "C9") then
+        elseif string.match(InputData , "P_C9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C9)
             print ("UART TX = C9")
             MQTTData = " "
 
-        elseif string.match(InputData , "D9") then
+        elseif string.match(InputData , "P_D9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D9)
             print ("UART TX = D9")
             MQTTData = " "
         
-        elseif string.match(InputData , "E9") then
+        elseif string.match(InputData , "P_E9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E9)
             print ("UART TX = E9")
             MQTTData = " "
 
-        elseif string.match(InputData , "F9") then
+        elseif string.match(InputData , "P_F9") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F9)
             print ("UART TX = F9")
             MQTTData = " "
@@ -423,37 +429,374 @@ local function Run_All()
     -- ===========================================================
         -- ########## COLOUM 10 / J ##########
     -- ===========================================================
-        elseif string.match(InputData , "10A") then
+        elseif string.match(InputData , "P_10A") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..A10)
             print ("UART TX = A10")
             MQTTData = " "
 
-        elseif string.match(InputData , "10B") then
+        elseif string.match(InputData , "P_10B") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..B10)
             print ("UART TX = B10")
             MQTTData = " "
 
-        elseif string.match(InputData , "10C") then
+        elseif string.match(InputData , "P_10C") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..C10)
             print ("UART TX = C10")
             MQTTData = " "
 
-        elseif string.match(InputData , "10D") then
+        elseif string.match(InputData , "P_10D") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..D10)
             print ("UART TX = D10")
             MQTTData = " "
 
-        elseif string.match(InputData , "10E") then
+        elseif string.match(InputData , "P_10E") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..E10)
             print ("UART TX = E10")
             MQTTData = " "
 
-        elseif string.match(InputData , "10F") then
+        elseif string.match(InputData , "P_10F") then
             uart.write(uartID,SINGLE_MOTOR_DISPENSE..F10)
             print ("UART TX = F10")
             MQTTData = " "
 
-        elseif string.match(InputData , "test") then
+    -- ===========================================================
+        -- ########## TEST MOTOR ONE BY ONE ##########
+    -- ===========================================================
+
+    -- ===========================================================
+        -- ########## COLOUM 1 / A ##########
+    -- ===========================================================
+        elseif string.match(InputData , "T_A1") then
+            uart.write(uartID,TEST_MOTOR..A1)
+            print("UART TX = A1")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_B1") then
+            uart.write(uartID,TEST_MOTOR..B1)
+            print("UART TX = B1")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C1") then
+            uart.write(uartID,TEST_MOTOR..C1)
+            print ("UART TX = C1")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D1") then
+            uart.write(uartID,TEST_MOTOR..D1)
+            print ("UART TX = D1")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E1") then
+            uart.write(uartID,TEST_MOTOR..E1)
+            print ("UART TX = E1")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F1") then
+            uart.write(uartID,TEST_MOTOR..F1)
+            print ("UART TX = F1")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 2 / B ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A2") then
+            uart.write(uartID,TEST_MOTOR..A2)
+            print ("UART TX = A2")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B2") then
+            uart.write(uartID,TEST_MOTOR..B2)
+            print ("UART TX = B2")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C2") then
+            uart.write(uartID,TEST_MOTOR..C2)
+            print ("UART TX = C2")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D2") then
+            uart.write(uartID,TEST_MOTOR..D2)
+            print ("UART TX = D2")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E2") then
+            uart.write(uartID,TEST_MOTOR..E2)
+            print ("UART TX = E5")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F2") then
+            uart.write(uartID,TEST_MOTOR..F2)
+            print ("UART TX = F2")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 3 / C ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A3") then
+            uart.write(uartID,TEST_MOTOR..A3)
+            print ("UART TX = A3")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B3") then
+            uart.write(uartID,TEST_MOTOR..B3)
+            print ("UART TX = B3")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C3") then
+            uart.write(uartID,TEST_MOTOR..C3)
+            print ("UART TX = C3")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_D3") then
+            uart.write(uartID,TEST_MOTOR..D3)
+            print ("UART TX = D3")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E3") then
+            uart.write(uartID,TEST_MOTOR..E3)
+            print ("UART TX = E3")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F3") then
+            uart.write(uartID,TEST_MOTOR..F3)
+            print ("UART TX = F3")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 4 / D ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A4") then
+            uart.write(uartID,TEST_MOTOR..A4)
+            print ("UART TX = A4")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B4") then
+            uart.write(uartID,TEST_MOTOR..B4)
+            print ("UART TX = B4")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C4") then
+            uart.write(uartID,TEST_MOTOR..C4)
+            print ("UART TX = C4")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_D4") then
+            uart.write(uartID,TEST_MOTOR..D4)
+            print ("UART TX = D4")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E4") then
+            uart.write(uartID,TEST_MOTOR..E4)
+            print ("UART TX = E4")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F4") then
+            uart.write(uartID,TEST_MOTOR..F4)
+            print ("UART TX = F4")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 5 / E ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A5") then
+            uart.write(uartID,TEST_MOTOR..A5)
+            print ("UART TX = A5")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_B5") then
+            uart.write(uartID,TEST_MOTOR..B5)
+            print ("UART TX = B5")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C5") then
+            uart.write(uartID,TEST_MOTOR..C5)
+            print ("UART TX = C5")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D5") then
+            uart.write(uartID,TEST_MOTOR..D5)
+            print ("UART TX = D5")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E5") then
+            uart.write(uartID,TEST_MOTOR..E5)
+            print ("UART TX = E5")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F5") then
+            uart.write(uartID,TEST_MOTOR..F5)
+            print ("UART TX = F5")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 6 / F ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A6") then
+            uart.write(uartID,TEST_MOTOR..A6)
+            print ("UART TX = A6")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B6") then
+            uart.write(uartID,TEST_MOTOR..B6)
+            print ("UART TX = B6")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C6") then
+            uart.write(uartID,TEST_MOTOR..C6)
+            print ("UART TX = C6")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D6") then
+            uart.write(uartID,TEST_MOTOR..D6)
+            print ("UART TX = D6")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_E6") then
+            uart.write(uartID,TEST_MOTOR..E6)
+            print ("UART TX = E6")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F6") then
+            uart.write(uartID,TEST_MOTOR..F6)
+            print ("UART TX = F6")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 7 / G ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A7") then
+            uart.write(uartID,TEST_MOTOR..A7)
+            print ("UART TX = A7")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B7") then
+            uart.write(uartID,TEST_MOTOR..B7)
+            print ("UART TX = B7")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "T_C7") then
+            uart.write(uartID,TEST_MOTOR..C7)
+            print ("UART TX = C7")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D7") then
+            uart.write(uartID,TEST_MOTOR..D7)
+            print ("UART TX = D7")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E7") then
+            uart.write(uartID,TEST_MOTOR..E7)
+            print ("UART TX = E7")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F7") then
+            uart.write(uartID,TEST_MOTOR..F7)
+            print ("UART TX = F7")
+            MQTTData = " "
+            
+        -- ===========================================================
+        -- ########## COLOUM 8 / H ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A8") then
+            uart.write(uartID,TEST_MOTOR..A8)
+            print ("UART TX = A8")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B8") then
+            uart.write(uartID,TEST_MOTOR..B8)
+            print ("UART TX = B8")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C8") then
+            uart.write(uartID,TEST_MOTOR..C8)
+            print ("UART TX = C8")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D8") then
+            uart.write(uartID,TEST_MOTOR..D8)
+            print ("UART TX = D8")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E8") then
+            uart.write(uartID,TEST_MOTOR..E8)
+            print ("UART TX = E8")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F8") then
+            uart.write(uartID,TEST_MOTOR..F8)
+            print ("UART TX = F8")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 9 / I ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_A9") then
+            uart.write(uartID,TEST_MOTOR..A9)
+            print ("UART TX = A9")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_B9") then
+            uart.write(uartID,TEST_MOTOR..B9)
+            print ("UART TX = B9")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_C9") then
+            uart.write(uartID,TEST_MOTOR..C9)
+            print ("UART TX = C9")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_D9") then
+            uart.write(uartID,TEST_MOTOR..D9)
+            print ("UART TX = D9")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_E9") then
+            uart.write(uartID,TEST_MOTOR..E9)
+            print ("UART TX = E9")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_F9") then
+            uart.write(uartID,TEST_MOTOR..F9)
+            print ("UART TX = F9")
+            MQTTData = " "
+
+        -- ===========================================================
+        -- ########## COLOUM 10 / J ##########
+        -- ===========================================================
+        elseif string.match(InputData , "T_10A") then
+            uart.write(uartID,TEST_MOTOR..A10)
+            print ("UART TX = A10")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_10B") then
+            uart.write(uartID,TEST_MOTOR..B10)
+            print ("UART TX = B10")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_10C") then
+            uart.write(uartID,TEST_MOTOR..C10)
+            print ("UART TX = C10")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_10D") then
+            uart.write(uartID,TEST_MOTOR..D10)
+            print ("UART TX = D10")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_10E") then
+            uart.write(uartID,TEST_MOTOR..E10)
+            print ("UART TX = E10")
+            MQTTData = " "
+
+        elseif string.match(InputData , "T_10F") then
+            uart.write(uartID,TEST_MOTOR..F10)
+            print ("UART TX = F10")
+            MQTTData = " "
+    -- ===========================================================
+        -- ########## TEST ALL MOTORS AT ONCE ##########
+    -- ===========================================================
+
+        elseif string.match(InputData , "test") then 
 
             MQTTData = " "
 
@@ -597,25 +940,25 @@ local function Run_All()
         elseif string.match(InputData , "RWA") then
             MQTTData = " "
 
-            uart.write(uartID, A1)
+            uart.write(uartID, TEST_MOTOR..A1)
             test_timer()
-            uart.write(uartID, A2)
+            uart.write(uartID, TEST_MOTOR..A2)
             test_timer()
-            uart.write(uartID, A3)
+            uart.write(uartID, TEST_MOTOR..A3)
             test_timer()
-            uart.write(uartID, A4)
+            uart.write(uartID, TEST_MOTOR..A4)
             test_timer()
-            uart.write(uartID, A5)
+            uart.write(uartID, TEST_MOTOR..A5)
             test_timer()
-            uart.write(uartID, A6)
+            uart.write(uartID, TEST_MOTOR..A6)
             test_timer()
-            uart.write(uartID, A7)
+            uart.write(uartID, TEST_MOTOR..A7)
             test_timer()
-            uart.write(uartID, A8)
+            uart.write(uartID, TEST_MOTOR..A8)
             test_timer()
-            uart.write(uartID, A9)
+            uart.write(uartID, TEST_MOTOR..A9)
             test_timer()
-            uart.write(uartID, A10)
+            uart.write(uartID, TEST_MOTOR..A10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
@@ -623,25 +966,25 @@ local function Run_All()
         elseif string.match(InputData , "RWB") then
             MQTTData = " "
 
-            uart.write(uartID, B1)
+            uart.write(uartID, TEST_MOTOR..B1)
             test_timer()
-            uart.write(uartID, B2)
+            uart.write(uartID, TEST_MOTOR..B2)
             test_timer()
-            uart.write(uartID, B3)
+            uart.write(uartID, TEST_MOTOR..B3)
             test_timer()
-            uart.write(uartID, B4)
+            uart.write(uartID, TEST_MOTOR..B4)
             test_timer()
-            uart.write(uartID, B5)
+            uart.write(uartID, TEST_MOTOR..B5)
             test_timer()
-            uart.write(uartID, B6)
+            uart.write(uartID, TEST_MOTOR..B6)
             test_timer()
-            uart.write(uartID, B7)
+            uart.write(uartID, TEST_MOTOR..B7)
             test_timer()
-            uart.write(uartID, B8)
+            uart.write(uartID, TEST_MOTOR..B8)
             test_timer()
-            uart.write(uartID, B9)
+            uart.write(uartID, TEST_MOTOR..B9)
             test_timer()
-            uart.write(uartID, B10)
+            uart.write(uartID, TEST_MOTOR..B10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
@@ -649,25 +992,25 @@ local function Run_All()
         elseif string.match(InputData , "RWC") then
             MQTTData = " "
 
-            uart.write(uartID, C1)
+            uart.write(uartID, TEST_MOTOR..C1)
             test_timer()
-            uart.write(uartID, C2)
+            uart.write(uartID, TEST_MOTOR..C2)
             test_timer()
-            uart.write(uartID, C3)
+            uart.write(uartID, TEST_MOTOR..C3)
             test_timer()
-            uart.write(uartID, C4)
+            uart.write(uartID, TEST_MOTOR..C4)
             test_timer()
-            uart.write(uartID, C5)
+            uart.write(uartID, TEST_MOTOR..C5)
             test_timer()
-            uart.write(uartID, C6)
+            uart.write(uartID, TEST_MOTOR..C6)
             test_timer()
-            uart.write(uartID, C7)
+            uart.write(uartID, TEST_MOTOR..C7)
             test_timer()
-            uart.write(uartID, C8)
+            uart.write(uartID, TEST_MOTOR..C8)
             test_timer()
-            uart.write(uartID, C9)
+            uart.write(uartID, TEST_MOTOR..C9)
             test_timer()
-            uart.write(uartID, C10)
+            uart.write(uartID, TEST_MOTOR..C10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
@@ -675,25 +1018,25 @@ local function Run_All()
         elseif string.match(InputData , "RWD") then
             MQTTData = " "
 
-            uart.write(uartID, D1)
+            uart.write(uartID, TEST_MOTOR..D1)
             test_timer()
-            uart.write(uartID, D2)
+            uart.write(uartID, TEST_MOTOR..D2)
             test_timer()
-            uart.write(uartID, D3)
+            uart.write(uartID, TEST_MOTOR..D3)
             test_timer()
-            uart.write(uartID, D4)
+            uart.write(uartID, TEST_MOTOR..D4)
             test_timer()
-            uart.write(uartID, D5)
+            uart.write(uartID, TEST_MOTOR..D5)
             test_timer()
-            uart.write(uartID, D6)
+            uart.write(uartID, TEST_MOTOR..D6)
             test_timer()
-            uart.write(uartID, D7)
+            uart.write(uartID, TEST_MOTOR..D7)
             test_timer()
-            uart.write(uartID, D8)
+            uart.write(uartID, TEST_MOTOR..D8)
             test_timer()
-            uart.write(uartID, D9)
+            uart.write(uartID, TEST_MOTOR..D9)
             test_timer()
-            uart.write(uartID, D10)
+            uart.write(uartID, TEST_MOTOR..D10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
@@ -701,25 +1044,25 @@ local function Run_All()
         elseif string.match(InputData , "RWE") then
             MQTTData = " "
 
-            uart.write(uartID, E1)
+            uart.write(uartID, TEST_MOTOR..E1)
             test_timer()
-            uart.write(uartID, E2)
+            uart.write(uartID, TEST_MOTOR..E2)
             test_timer()
-            uart.write(uartID, E3)
+            uart.write(uartID, TEST_MOTOR..E3)
             test_timer()
-            uart.write(uartID, E4)
+            uart.write(uartID, TEST_MOTOR..E4)
             test_timer()
-            uart.write(uartID, E5)
+            uart.write(uartID, TEST_MOTOR..E5)
             test_timer()
-            uart.write(uartID, E6)
+            uart.write(uartID, TEST_MOTOR..E6)
             test_timer()
-            uart.write(uartID, E7)
+            uart.write(uartID, TEST_MOTOR..E7)
             test_timer()
-            uart.write(uartID, E8)
+            uart.write(uartID, TEST_MOTOR..E8)
             test_timer()
-            uart.write(uartID, E9)
+            uart.write(uartID, TEST_MOTOR..E9)
             test_timer()
-            uart.write(uartID, E10)
+            uart.write(uartID, TEST_MOTOR..E10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
@@ -727,25 +1070,25 @@ local function Run_All()
         elseif string.match(InputData , "RWF") then
             MQTTData = " "
 
-            uart.write(uartID, F1)
+            uart.write(uartID, TEST_MOTOR..F1)
             test_timer()
-            uart.write(uartID, F2)
+            uart.write(uartID, TEST_MOTOR..F2)
             test_timer()
-            uart.write(uartID, F3)
+            uart.write(uartID, TEST_MOTOR..F3)
             test_timer()
-            uart.write(uartID, F4)
+            uart.write(uartID, TEST_MOTOR..F4)
             test_timer()
-            uart.write(uartID, F5)
+            uart.write(uartID, TEST_MOTOR..F5)
             test_timer()
-            uart.write(uartID, F6)
+            uart.write(uartID, TEST_MOTOR..F6)
             test_timer()
-            uart.write(uartID, F7)
+            uart.write(uartID, TEST_MOTOR..F7)
             test_timer()
-            uart.write(uartID, F8)
+            uart.write(uartID, TEST_MOTOR..F8)
             test_timer()
-            uart.write(uartID, F9)
+            uart.write(uartID, TEST_MOTOR..F9)
             test_timer()
-            uart.write(uartID, F10)
+            uart.write(uartID, TEST_MOTOR..F10)
             test_timer()
             mqttOutMsg.PubQos0Temp(InputDrop)
 
