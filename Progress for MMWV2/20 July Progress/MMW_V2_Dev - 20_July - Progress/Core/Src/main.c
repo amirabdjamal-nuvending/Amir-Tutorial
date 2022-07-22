@@ -296,6 +296,7 @@ void transmit_Data_to_DTU(){
 	}
 }
 
+<<<<<<< Updated upstream
 void split_Command_from_DTU(){
 	for(int i = 0; i < sizeof(receivedData4G); i++){
 	  if(receivedData4G[i] != '\0'){
@@ -319,6 +320,49 @@ void split_Command_from_DTU(){
 	 }
 }
 
+=======
+int binarySearch_row(uint16_t array[], uint16_t x, int low, int high)
+{
+    // Repeat until the pointers low and high meet each
+    // other
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (array[mid] == x)
+            return mid;
+
+        if (array[mid] < x)
+            low = mid + 1;
+
+        else
+            high = mid - 1;
+    }
+
+    return -1;
+}
+
+int binarySearch_column(uint16_t array[], uint16_t x, int low, int high)
+{
+    // Repeat until the pointers low and high meet each
+    // other
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (array[mid] == x)
+            return mid;
+
+        if (array[mid] < x)
+            low = mid + 1;
+
+        else
+            high = mid - 1;
+    }
+
+    return -1;
+}
+
+
+>>>>>>> Stashed changes
 void concat_Command_for_STC(){
 
 	/************* Set First & End Hex Byte *************/
@@ -347,8 +391,13 @@ void concat_Command_for_STC(){
 
 
 	if((strcmp(receivedData4G[0], motor_First_String[0]) == 0) && (strcmp(receivedData4G[1], motor_Second_String[0]) == 0)){
+<<<<<<< Updated upstream
 //		dapat[0] = 6;
 //		dapat[1] = 7;
+=======
+		dapat[0] = 6;
+		dapat[1] = 7;
+>>>>>>> Stashed changes
 		stc_command[1] = SINGLE_MOTOR_DISPENSING;
 		stc_command[4] = SINGLE_MOTOR_DISPENSING_MODE;
 
