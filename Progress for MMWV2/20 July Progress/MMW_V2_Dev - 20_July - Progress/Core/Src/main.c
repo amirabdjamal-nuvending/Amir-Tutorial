@@ -356,7 +356,7 @@ int binarySearch_column(uint16_t array[], uint16_t x, int low, int high)
 
         else
             high = mid - 1;
-    }
+     }
 
     return -1;
 }
