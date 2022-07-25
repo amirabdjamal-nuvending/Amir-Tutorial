@@ -1098,12 +1098,21 @@ local function Run_All()
             --mqttOutMsg.PubQos0Drop()
             --print("--> AYUNI <-- ")
             -----mqttOutMsg.PubQos0Temp()
-            uart.write(uartID, "YO\n")
+            uart.write(uartID, "stachck")
             --local Arduino = uart.read(uartID, "*s")
             --mqttOutMsg.PubQos0Temp(Arduino)
             MQTTData = " "
             --mqttOutMsg.PubQos0Drop()
             --sys.wait(10)
+
+        elseif string.match(InputData , "temp") then
+            uart.write(uartID, "tmpchck")
+            MQTTData = " "
+
+        elseif string.match(InputData , "door") then
+            uart.write(uartID, "dorchck")
+            MQTTData = " "
+        
 
         elseif string.match(InputData , "RE") then
             uart.write(uartID, "RE\n")
