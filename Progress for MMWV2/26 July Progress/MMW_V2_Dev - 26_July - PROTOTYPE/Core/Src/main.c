@@ -295,50 +295,50 @@ void transmit_Data_to_DTU(){
 
 	if (strcmp(RX_DATA_FROM_STC, DROP_SUCCESS) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "sglsuccess_%.2f_%d_1_1\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "sglsuccess_%.2f_%d_1_1", TEMPERATURE, DOOR_STATUS);
 		for(int i = 0; i < sizeof(RX_DATA_FROM_STC); i++){
 			RX_DATA_FROM_STC[i] = '\0';
 		}
 	}
 	else if (strcmp(RX_DATA_FROM_STC, DROP_NOT_SUCCESS) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "sglfail_%.2f_%d_0_1\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "sglfail_%.2f_%d_0_1", TEMPERATURE, DOOR_STATUS);
 		for(int i = 0; i < sizeof(RX_DATA_FROM_STC); i++){
 			RX_DATA_FROM_STC[i] = '\0';
 		}
 	}
 	else if (strcmp(RX_DATA_FROM_STC, MOTOR_ERROR) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "sglmotorerror_%.2f_%d_0_0\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "sglmotorerror_%.2f_%d_0_0", TEMPERATURE, DOOR_STATUS);
 		for(int i = 0; i < sizeof(RX_DATA_FROM_STC); i++){
 			RX_DATA_FROM_STC[i] = '\0';
 		}
 	}
 	else if (strcmp(RX_DATA_FROM_STC, TEST_MOTOR_NORMAL) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "tstsuccess_%.2f_%d_0_1\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "tstsuccess_%.2f_%d_0_1", TEMPERATURE, DOOR_STATUS);
 		for(int i = 0; i < sizeof(RX_DATA_FROM_STC); i++){
 			RX_DATA_FROM_STC[i] = '\0';
 		}
 	}
 	else if (strcmp(RX_DATA_FROM_STC, TEST_MOTOR_ERROR) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "tstmotorerror_%.2f_%d_0_0\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "tstmotorerror_%.2f_%d_0_0", TEMPERATURE, DOOR_STATUS);
 		for(int i = 0; i < sizeof(RX_DATA_FROM_STC); i++){
 			RX_DATA_FROM_STC[i] = '\0';
 		}
 	}
 	else if (strncmp(RX_BUFF_FROM_DTU, SENSOR_REQUEST_STRING[0], 7) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "tmpchck_%.2f_0_0_0\n", TEMPERATURE);
+		sprintf(TX_BUFF_TO_DTU, "tmpchck_%.2f_0_0_0", TEMPERATURE);
 	}
 	else if (strncmp(RX_BUFF_FROM_DTU, SENSOR_REQUEST_STRING[1], 7) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "dorchck_0_%d_0_0\n", DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "dorchck_0_%d_0_0", DOOR_STATUS);
 	}
 	else if (strncmp(RX_BUFF_FROM_DTU, SENSOR_REQUEST_STRING[2], 7) == 0){
 
-		sprintf(TX_BUFF_TO_DTU, "stachck_%.2f_%d_0_0\n", TEMPERATURE, DOOR_STATUS);
+		sprintf(TX_BUFF_TO_DTU, "stachck_%.2f_%d_0_0", TEMPERATURE, DOOR_STATUS);
 	}
 	else{
 
