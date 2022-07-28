@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00018586  00000000  00000000  0002ee10  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000d04d  00000000  00000000  00047396  2**0
+ 17 .debug_line   0000d04c  00000000  00000000  00047396  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008bdde  00000000  00000000  000543e3  2**0
+ 18 .debug_str    0008bd44  00000000  00000000  000543e2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  000e01c1  2**0
+ 19 .comment      00000050  00000000  00000000  000e0126  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004a2c  00000000  00000000  000e0214  2**2
+ 20 .debug_frame  00004a2c  00000000  00000000  000e0178  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1764,6 +1764,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 0800122c <write_read_Temperature>:
 
 /**************************** LOOPING FUNCTIONS ****************************/
+/*-------WRITE & READ TEMPERATURE FUNCTION-------*/
 
 void write_read_Temperature(){
  800122c:	b580      	push	{r7, lr}
@@ -1854,6 +1855,8 @@ void write_read_Temperature(){
  80012d8:	20000488 	.word	0x20000488
 
 080012dc <transmit_Data_to_DTU>:
+
+/*-------TRANSMITTING DATA TO DTU FUNCTION-------*/
 
 void transmit_Data_to_DTU(){
  80012dc:	b580      	push	{r7, lr}
@@ -2166,6 +2169,8 @@ void transmit_Data_to_DTU(){
  8001524:	200002cc 	.word	0x200002cc
 
 08001528 <split_Command_from_DTU>:
+
+/**************************** FUNCTIONS THAT RUN IN UART CALLBACK FUNCTIONS ****************************/
 
 void split_Command_from_DTU(){
  8001528:	b580      	push	{r7, lr}
@@ -2741,29 +2746,28 @@ int main(void)
  80018b2:	601a      	str	r2, [r3, #0]
 	  }
 	  if(HAL_GPIO_ReadPin(DOOR_SENSOR_PORT, DOOR_SENSOR_PIN) == GPIO_PIN_RESET){
- 80018b4:	2101      	movs	r1, #1
- 80018b6:	480e      	ldr	r0, [pc, #56]	; (80018f0 <main+0x88>)
- 80018b8:	f001 fa30 	bl	8002d1c <HAL_GPIO_ReadPin>
- 80018bc:	4603      	mov	r3, r0
- 80018be:	2b00      	cmp	r3, #0
- 80018c0:	d103      	bne.n	80018ca <main+0x62>
+ 80018b4:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80018b8:	480d      	ldr	r0, [pc, #52]	; (80018f0 <main+0x88>)
+ 80018ba:	f001 fa2f 	bl	8002d1c <HAL_GPIO_ReadPin>
+ 80018be:	4603      	mov	r3, r0
+ 80018c0:	2b00      	cmp	r3, #0
+ 80018c2:	d103      	bne.n	80018cc <main+0x64>
 		  DOOR_STATUS = 1;
- 80018c2:	4b0c      	ldr	r3, [pc, #48]	; (80018f4 <main+0x8c>)
- 80018c4:	2201      	movs	r2, #1
- 80018c6:	601a      	str	r2, [r3, #0]
- 80018c8:	e002      	b.n	80018d0 <main+0x68>
+ 80018c4:	4b0b      	ldr	r3, [pc, #44]	; (80018f4 <main+0x8c>)
+ 80018c6:	2201      	movs	r2, #1
+ 80018c8:	601a      	str	r2, [r3, #0]
+ 80018ca:	e002      	b.n	80018d2 <main+0x6a>
 	  }
 	  else{
 		  DOOR_STATUS = 0;
- 80018ca:	4b0a      	ldr	r3, [pc, #40]	; (80018f4 <main+0x8c>)
- 80018cc:	2200      	movs	r2, #0
- 80018ce:	601a      	str	r2, [r3, #0]
+ 80018cc:	4b09      	ldr	r3, [pc, #36]	; (80018f4 <main+0x8c>)
+ 80018ce:	2200      	movs	r2, #0
+ 80018d0:	601a      	str	r2, [r3, #0]
 	  }
 	  write_read_Temperature();
- 80018d0:	f7ff fcac 	bl	800122c <write_read_Temperature>
+ 80018d2:	f7ff fcab 	bl	800122c <write_read_Temperature>
 	  if(tx_to_DTU_enable == 1){
- 80018d4:	e7e5      	b.n	80018a2 <main+0x3a>
- 80018d6:	bf00      	nop
+ 80018d6:	e7e4      	b.n	80018a2 <main+0x3a>
  80018d8:	20000284 	.word	0x20000284
  80018dc:	20000464 	.word	0x20000464
  80018e0:	20000310 	.word	0x20000310
@@ -3268,28 +3272,27 @@ static void MX_GPIO_Init(void)
  8001bb4:	480a      	ldr	r0, [pc, #40]	; (8001be0 <MX_GPIO_Init+0xa8>)
  8001bb6:	f000 ff2d 	bl	8002a14 <HAL_GPIO_Init>
 
-  /*Configure GPIO pin : PB0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
- 8001bba:	2301      	movs	r3, #1
- 8001bbc:	613b      	str	r3, [r7, #16]
+  /*Configure GPIO pin : PB9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+ 8001bba:	f44f 7300 	mov.w	r3, #512	; 0x200
+ 8001bbe:	613b      	str	r3, [r7, #16]
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
- 8001bbe:	2300      	movs	r3, #0
- 8001bc0:	617b      	str	r3, [r7, #20]
+ 8001bc0:	2300      	movs	r3, #0
+ 8001bc2:	617b      	str	r3, [r7, #20]
   GPIO_InitStruct.Pull = GPIO_PULLUP;
- 8001bc2:	2301      	movs	r3, #1
- 8001bc4:	61bb      	str	r3, [r7, #24]
+ 8001bc4:	2301      	movs	r3, #1
+ 8001bc6:	61bb      	str	r3, [r7, #24]
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
- 8001bc6:	f107 0310 	add.w	r3, r7, #16
- 8001bca:	4619      	mov	r1, r3
- 8001bcc:	4805      	ldr	r0, [pc, #20]	; (8001be4 <MX_GPIO_Init+0xac>)
- 8001bce:	f000 ff21 	bl	8002a14 <HAL_GPIO_Init>
+ 8001bc8:	f107 0310 	add.w	r3, r7, #16
+ 8001bcc:	4619      	mov	r1, r3
+ 8001bce:	4805      	ldr	r0, [pc, #20]	; (8001be4 <MX_GPIO_Init+0xac>)
+ 8001bd0:	f000 ff20 	bl	8002a14 <HAL_GPIO_Init>
 
 }
- 8001bd2:	bf00      	nop
- 8001bd4:	3720      	adds	r7, #32
- 8001bd6:	46bd      	mov	sp, r7
- 8001bd8:	bd80      	pop	{r7, pc}
- 8001bda:	bf00      	nop
+ 8001bd4:	bf00      	nop
+ 8001bd6:	3720      	adds	r7, #32
+ 8001bd8:	46bd      	mov	sp, r7
+ 8001bda:	bd80      	pop	{r7, pc}
  8001bdc:	40021000 	.word	0x40021000
  8001be0:	40010800 	.word	0x40010800
  8001be4:	40010c00 	.word	0x40010c00
