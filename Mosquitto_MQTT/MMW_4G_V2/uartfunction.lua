@@ -67,7 +67,11 @@ local function parse(data)
             print("Invalid Temperature Data")
         end
     else
-        print("Invalid Command Format")
+        if string.find(data, "DOOR OPEN") then
+            print("door opennn\n")
+        else
+            print("Invalid Command Format")
+        end
     end
 end
 
