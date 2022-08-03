@@ -85,10 +85,8 @@ int DROP_STATUS = 0; //  0 = Drop Fail, 1 = Drop Success
 int DOOR_STATUS;     //  0 = Door Open, 1 = Door Closed
 int MOTOR_STATUS = 0;// 0 = Motor Error, 1 = Motor Normal
 
-//char DOOR_OPEN_MESSAGE[] = "Vending Machine's Door is open!\n";
-//char DOOR_CLOSED_MESSAGE[] = "Vending Machine's Door is closed!\n";
-//
 int toggle_send_once = 0;
+int tx_doorOpen_to_DTU_enable = 1;
 
 /**************************** TEMPERATURE Sensor Value ****************************/
 
@@ -255,12 +253,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 					strncmp(RX_BUFF_FROM_DTU, SENSOR_REQUEST_STRING[2], 7) == 0){
 
 			  tx_to_DTU_enable = 1;
+			  tx_doorOpen_to_DTU_enable = 0;
 		}
 		else{
 			  split_Command_from_DTU();
 			  concat_Command_for_STC();
 			/**************************** UART Transmit & Receive ****************************/
 			  send_Command_to_STC();
+			  tx_doorOpen_to_DTU_enable = 0;
 		}
 	 }
 
@@ -350,7 +350,7 @@ void transmit_Data_to_DTU(){
 
 		sprintf(TX_BUFF_TO_DTU, "stachck_%.2f_%d_0_0_", TEMPERATURE, DOOR_STATUS);
 	}
-	else if(DOOR_STATUS == 0){
+	else if(DOOR_STATUS == 0 && tx_doorOpen_to_DTU_enable == 1){
 
 		sprintf(TX_BUFF_TO_DTU, "DOOR OPEN");
 	}
@@ -359,6 +359,7 @@ void transmit_Data_to_DTU(){
 	}
 
 	HAL_UART_Transmit_IT(&huart1, TX_BUFF_TO_DTU, sizeof(TX_BUFF_TO_DTU));
+	tx_doorOpen_to_DTU_enable = 1;
 
 }
 
@@ -479,6 +480,9 @@ void concat_Command_for_STC(){
 void send_Command_to_STC(void){
 
 	HAL_UART_Transmit_IT(&huart2, TX_COMMAND_TO_STC, 6);
+	for(int i = 0; i < sizeof(RX_BUFF_FROM_DTU); i++){
+		RX_BUFF_FROM_DTU[i] = '\0';
+	}
 }
 
 
@@ -549,6 +553,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     	if(HAL_GPIO_ReadPin(DOOR_SENSOR_PORT, DOOR_SENSOR_PIN) != GPIO_PIN_RESET){
     		DOOR_STATUS = 0;
     		toggle_send_once = 1;
+    		tx_doorOpen_to_DTU_enable = 1;
 		}
 		else{
 			DOOR_STATUS = 1;
