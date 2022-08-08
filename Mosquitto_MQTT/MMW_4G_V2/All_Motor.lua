@@ -58,7 +58,7 @@ local function Run_All()
         local B7 = "_B_7"
         local B8 = "_B_8"
         local B9 = "_B_9"
-        local B10 = "_B_B"
+        local B10 = "_B_A"
 
         -- ##### TRAY C #####
         local C1 = "_C_1"
@@ -70,7 +70,7 @@ local function Run_All()
         local C7 = "_C_7"
         local C8 = "_C_8"
         local C9 = "_C_9"
-        local C10 = "_C_C"
+        local C10 = "_C_A"
 
         -- ##### TRAY D #####
         local D1 = "_D_1"
@@ -82,7 +82,7 @@ local function Run_All()
         local D7 = "_D_7"
         local D8 = "_D_8"
         local D9 = "_D_9"
-        local D10 = "_D_D"
+        local D10 = "_D_A"
 
         -- ##### TRAY E #####
         local E1 = "_E_1"
@@ -94,7 +94,7 @@ local function Run_All()
         local E7 = "_E_7"
         local E8 = "_E_8"
         local E9 = "_E_9"
-        local E10 = "_E_E"
+        local E10 = "_E_A"
 
         -- ##### TRAY F #####
         local F1 = "_F_1"
@@ -106,7 +106,7 @@ local function Run_All()
         local F7 = "_F_7"
         local F8 = "_F_8"
         local F9 = "_F_9"
-        local F10 = "_F_F"
+        local F10 = "_F_A"
 
         InputData = MQTTData
         
@@ -959,6 +959,21 @@ local function Run_All()
             -- uart.write(uartID, mqttOutMsg.Mode_Status()..F10)
             uartfunction.write(mqttOutMsg.Mode_Status()..F10)
             print("--------------------------------------")
+
+        elseif string.match(InputData , "ADT") then
+            first_indicator()
+            -- uart.write(uartID,mqttOutMsg.Mode_Status()..F10)
+            uartfunction.write("adtchck")
+            print("--------------------------------------")
+            MQTTData = " "
+            
+        elseif string.match(InputData , "MDT") then
+            first_indicator()
+            -- uart.write(uartID,mqttOutMsg.Mode_Status()..F10)
+            uartfunction.write("mdtchck")
+            print("Do pass an object through the drop sensor.")
+            print("--------------------------------------")
+            MQTTData = " "
 
         else
             MQTTData = " "

@@ -68,7 +68,9 @@ local function parse(data)
         end
     else
         if string.find(data, "DOOR OPEN") then
-            print("door opennn\n")
+            print("door open")
+        elseif string.find(data, "DROP") then --All possible outcomes string from STM32 has 'DROP' string in them.
+            print("drop testing done")
         else
             print("Invalid Command Format")
         end
