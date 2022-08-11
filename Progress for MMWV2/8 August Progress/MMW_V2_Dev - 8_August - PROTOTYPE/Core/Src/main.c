@@ -272,7 +272,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 				  split_Command_from_DTU();
 			}
-			else{}
 
 			  concat_Command_for_STC();
 			/**************************** UART Transmit & Receive ****************************/
@@ -316,6 +315,8 @@ void write_read_Temperature(){
 /*-------TRANSMITTING DATA TO DTU FUNCTION-------*/
 
 void transmit_Data_to_DTU(){
+
+	int proceed_transmit = 1;
 
 	for(int i = 0; i < sizeof(TX_BUFF_TO_DTU); i++){
 		TX_BUFF_TO_DTU[i] = '\0';
@@ -401,9 +402,13 @@ void transmit_Data_to_DTU(){
 		sprintf(TX_BUFF_TO_DTU, "DOOR OPEN");
 	}
 	else{
-
+		proceed_transmit = 0;
 	}
-	HAL_UART_Transmit_IT(&huart1, TX_BUFF_TO_DTU, sizeof(TX_BUFF_TO_DTU));
+
+	if(proceed_transmit == 1){
+		HAL_UART_Transmit_IT(&huart1, TX_BUFF_TO_DTU, sizeof(TX_BUFF_TO_DTU));
+	}
+	proceed_transmit = 1;
 	tx_doorOpen_to_DTU_disable = 0;
 	HAL_Delay(500);
 	HAL_NVIC_SystemReset();
@@ -443,9 +448,6 @@ void concat_Command_for_STC(){
 	    TX_COMMAND_TO_STC[1] = TEST_MOTOR_FUNCTION;// ---------------------------->test motor function = 0x03
 	    TX_COMMAND_TO_STC[4] = TEST_MOTOR_FUNCTION_MODE;// ----------------------->test if spiral cargo motor not connected = 0x11
 	}
-	else{
-
-	}
 
 	/************* Set Third Hex Byte (Motor MOTOR_ROW)*************/
 	if(strncmp(SPLIT_RX_BUFF_FROM_DTU[1], MOTOR_SECOND_STRING[0], 1) == 0){
@@ -465,9 +467,6 @@ void concat_Command_for_STC(){
 	}
 	else if (strncmp(SPLIT_RX_BUFF_FROM_DTU[1], MOTOR_SECOND_STRING[5], 1) == 0){
 		TX_COMMAND_TO_STC[2] = MOTOR_ROW[5];// ------------------------------------------>F = 0x01
-	}
-	else{
-
 	}
 
 	/************* Set Fourth Hex Byte (Motor MOTOR_COLUMN)*************/
@@ -502,9 +501,6 @@ void concat_Command_for_STC(){
 	else if (strncmp(SPLIT_RX_BUFF_FROM_DTU[2], MOTOR_THIRD_STRING[9], 1) == 0){
 		TX_COMMAND_TO_STC[3] = MOTOR_COLUMN[9];// ------------------------------------------>A = 0x01
 	}
-	else{
-
-	}
 
 	/************* Set Second, Third, Fourth & Fifth Hex Byte (FOR DROP SENSOR TEST) *************/
 
@@ -519,9 +515,6 @@ void concat_Command_for_STC(){
 		TX_COMMAND_TO_STC[2] = 0x00;
 		TX_COMMAND_TO_STC[3] = 0x00;
 		TX_COMMAND_TO_STC[4] = 0x00;
-	}
-	else{
-
 	}
 
 }

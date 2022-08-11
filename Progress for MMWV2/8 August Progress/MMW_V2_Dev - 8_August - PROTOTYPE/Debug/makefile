@@ -60,8 +60,8 @@ all: main-build
 main-build: MMW_V2_Dev.elf secondary-outputs
 
 # Tool invocations
-MMW_V2_Dev.elf MMW_V2_Dev.map: $(OBJS) $(USER_OBJS) C:\Users\NuVending\ Hardware\Desktop\Kerja\Amir-Tutorial\Progress\ for\ MMWV2\6\ August\ Progress\MMW_V2_Dev\ -\ 6_August\ -\ PROTOTYPE\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MMW_V2_Dev.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\NuVending Hardware\Desktop\Kerja\Amir-Tutorial\Progress for MMWV2\6 August Progress\MMW_V2_Dev - 6_August - PROTOTYPE\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MMW_V2_Dev.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+MMW_V2_Dev.elf MMW_V2_Dev.map: $(OBJS) $(USER_OBJS) C:\Users\NuVending\ Hardware\Desktop\Kerja\Amir-Tutorial\Progress\ for\ MMWV2\8\ August\ Progress\MMW_V2_Dev\ -\ 8_August\ -\ PROTOTYPE\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MMW_V2_Dev.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\NuVending Hardware\Desktop\Kerja\Amir-Tutorial\Progress for MMWV2\8 August Progress\MMW_V2_Dev - 8_August - PROTOTYPE\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MMW_V2_Dev.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
